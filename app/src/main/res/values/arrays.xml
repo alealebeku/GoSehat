@@ -1,0 +1,8 @@
+<resources>
+    <string-array name="clinic_array">
+        <item>Pilih Klinik</item> <!-- This is the hint item -->
+        <item>Klinik A</item>
+        <item>Klinik B</item>
+        <item>Klinik C</item>
+    </string-array>
+</resources>

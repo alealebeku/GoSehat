@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginVertical="10dp"
+    android:layout_marginHorizontal="10dp"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/listnamadokter"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
+            android:text="Nama Dokter"
+            android:textStyle="bold"
+            android:textColor="@color/blue"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/listSpesialisDokter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/listnamadokter"
+            android:layout_marginStart="30dp"
+            android:layout_marginBottom="5dp"
+            android:text="Spesialis Dokter"
+            android:textColor="@color/blue"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/listKlnikDokter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/listSpesialisDokter"
+            android:layout_marginStart="30dp"
+            android:layout_marginBottom="5dp"
+            android:text="Klinik Dokter"
+            android:textColor="@color/blue"
+            android:textSize="14sp" />
+        <ImageButton
+            android:id="@+id/updateButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="131dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/listnamadokter"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:src="@drawable/iconpensil"
+            android:contentDescription="Update" />
+
+        <ImageButton
+            android:id="@+id/deleteButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="174dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/listnamadokter"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:src="@drawable/icontrash"
+            android:contentDescription="Delete" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
