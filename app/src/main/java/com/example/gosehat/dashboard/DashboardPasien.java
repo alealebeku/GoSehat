@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gosehat.R;
-import com.example.gosehat.rawatjalan.RawatJalan;
+import com.example.gosehat.rawatjalan.AddRawatJalan;
 import com.example.gosehat.spesialis.ViewSpesialis;
 
 public class DashboardPasien extends AppCompatActivity {
@@ -21,7 +21,7 @@ public class DashboardPasien extends AppCompatActivity {
         daftar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DashboardPasien.this, RawatJalan.class);
+                Intent intent = new Intent(DashboardPasien.this, AddRawatJalan.class);
                 startActivity(intent);
             }
         });
@@ -29,7 +29,7 @@ public class DashboardPasien extends AppCompatActivity {
         Rmedis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DashboardPasien.this, RawatJalan.class);
+                Intent intent = new Intent(DashboardPasien.this, AddRawatJalan.class);
                 startActivity(intent);
             }
         });
