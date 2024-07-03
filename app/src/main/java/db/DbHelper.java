@@ -149,7 +149,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    public ArrayList<User> getUsernamePassword() {
+    public ArrayList<User> getUsernameEmail() {
         ArrayList<User> users = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
@@ -160,7 +160,7 @@ public class DbHelper extends SQLiteOpenHelper {
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     User user = new User();
-                    user.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(username)));
+                    user.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(email)));
                     user.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(password)));
                     user.setRole(cursor.getString(cursor.getColumnIndexOrThrow(role))); // Set role
 

@@ -56,7 +56,8 @@
                 android:hint="Email"
                 android:padding="8dp"
                 android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColorHighlight="@color/cardview_dark_background"
+                />
 
             <Spinner
                 android:id="@+id/roleSpinner"

@@ -1,0 +1,68 @@
+[debug] [2024-07-01T08:42:21.815Z] ----------------------------------------------------------------------
+[debug] [2024-07-01T08:42:21.818Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\student\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2024-07-01T08:42:21.818Z] CLI Version:   13.12.0
+[debug] [2024-07-01T08:42:21.818Z] Platform:      win32
+[debug] [2024-07-01T08:42:21.818Z] Node Version:  v21.7.1
+[debug] [2024-07-01T08:42:21.819Z] Time:          Mon Jul 01 2024 15:42:21 GMT+0700 (Western Indonesia Time)
+[debug] [2024-07-01T08:42:21.819Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-07-01T08:42:21.884Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-07-01T08:42:21.884Z] > authorizing via signed-in user (pratamateguh715@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  D:\File Teguh Eldi Pratama\GoSehat\GoSehat
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2024-07-01T08:42:33.226Z] Using project from CLI flag: gosehat-52cca
+[debug] [2024-07-01T08:42:33.229Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/gosehat-52cca [none]
+[debug] [2024-07-01T08:42:33.746Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/gosehat-52cca 200
+[debug] [2024-07-01T08:42:33.746Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/gosehat-52cca {"projectId":"gosehat-52cca","projectNumber":"886717690826","displayName":"GoSehat","name":"projects/gosehat-52cca","resources":{"hostingSite":"gosehat-52cca","realtimeDatabaseInstance":"gosehat-52cca-default-rtdb"},"state":"ACTIVE","etag":"1_02b63eac-b59c-43da-a06d-45a5f1362fcb"}
+[info] i  Using project gosehat-52cca (GoSehat) 
+[info] 
+=== Functions Setup
+[debug] [2024-07-01T08:42:33.778Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-07-01T08:42:33.779Z] > authorizing via signed-in user (pratamateguh715@gmail.com)
+[debug] [2024-07-01T08:42:33.779Z] [iam] checking project gosehat-52cca for permissions ["firebase.projects.get"]
+[debug] [2024-07-01T08:42:33.779Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/gosehat-52cca:testIamPermissions [none]
+[debug] [2024-07-01T08:42:33.779Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/gosehat-52cca:testIamPermissions x-goog-quota-user=projects/gosehat-52cca
+[debug] [2024-07-01T08:42:33.779Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/gosehat-52cca:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-07-01T08:42:34.885Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/gosehat-52cca:testIamPermissions 200
+[debug] [2024-07-01T08:42:34.886Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/gosehat-52cca:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-07-01T08:42:34.886Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/gosehat-52cca/services/cloudfunctions.googleapis.com [none]
+[debug] [2024-07-01T08:42:34.886Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/gosehat-52cca/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/gosehat-52cca
+[debug] [2024-07-01T08:42:34.888Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/gosehat-52cca/services/runtimeconfig.googleapis.com [none]
+[debug] [2024-07-01T08:42:34.888Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/gosehat-52cca/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/gosehat-52cca
+[debug] [2024-07-01T08:42:36.503Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/gosehat-52cca/services/runtimeconfig.googleapis.com 200
+[debug] [2024-07-01T08:42:36.503Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/gosehat-52cca/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2024-07-01T08:42:36.586Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/gosehat-52cca/services/cloudfunctions.googleapis.com 200
+[debug] [2024-07-01T08:42:36.587Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/gosehat-52cca/services/cloudfunctions.googleapis.com [omitted]
+[info] 
+Detected existing codebase(s): default
+
+[info] Let's create a new codebase for your functions.
+[info] A directory corresponding to the codebase will be created in your project
+[info] with sample code pre-configured.
+
+[info] See https://firebase.google.com/docs/functions/organize-functions for
+[info] more information on organizing your functions using codebases.
+
+[info] Functions can be deployed with firebase deploy.
+
+[error] Invalid codebase name. Codebase must be less than 64 characters and can contain only lowercase letters, numeric characters, underscores, and dashes.
