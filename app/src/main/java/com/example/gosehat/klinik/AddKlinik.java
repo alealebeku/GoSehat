@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gosehat.R;
+import com.example.gosehat.dashboard.DashboardAdmin;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -72,6 +73,14 @@ public class AddKlinik extends AppCompatActivity {
                 Toast.makeText(this, "Gagal menyimpan data", Toast.LENGTH_SHORT).show();
             }
         }
+
+        ImageView back = findViewById(R.id.iconback);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
     private void resetInputFields() {
         nama_klinik.setText("");

@@ -34,13 +34,14 @@ public class ViewJadwal extends AppCompatActivity {
         listView = findViewById(R.id.listviewjadwal);
         fab = findViewById(R.id.fab);
 
-        jadwalDokterArrayList = new ArrayList<>();
+        // Fetch data from database
+        jadwalDokterArrayList = dbHelper.getAllJadwal();
+
+        // Initialize adapter and set it to ListView
         adapter = new JadwalAdapter(this, jadwalDokterArrayList, dbHelper);
         listView.setAdapter(adapter);
 
-        adapter = new JadwalAdapter(this, jadwalDokterArrayList, dbHelper);
-        listView.setAdapter(adapter);
-
+        // Set listener for FAB to open AddSpesialisActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,15 +50,12 @@ public class ViewJadwal extends AppCompatActivity {
             }
         });
     }
-    private void reloadData() {
-        jadwalDokterArrayList.clear(); // Clear existing data
-//        jadwalDokterArrayList.addAll(dbHelper.getAllKlinik()); 
-        adapter.notifyDataSetChanged(); // Notify adapter that data has changed
-    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        // Load data from database and update ListView
-        reloadData();
+        jadwalDokterArrayList.clear();
+        jadwalDokterArrayList.addAll(dbHelper.getAllJadwal());
+        adapter.notifyDataSetChanged();
     }
 }
