@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "886717690826",
+    "project_id": "gosehat-52cca",
+    "storage_bucket": "gosehat-52cca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:886717690826:android:377d42c8fc6f742c539533",
+        "android_client_info": {
+          "package_name": "com.example.gosehat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABoYEuFtfpSWxDAGZpk_iXKJlkNMZu0lw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
