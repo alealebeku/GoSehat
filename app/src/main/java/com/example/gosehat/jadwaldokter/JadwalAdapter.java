@@ -26,11 +26,13 @@ public class JadwalAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<JadwalDokter> jadwalDokterArrayList;
     private DbHelper dbHelper;
+
     public JadwalAdapter(Context context, ArrayList<JadwalDokter> jadwalDokterArrayList, DbHelper dbHelper) {
         this.context = context;
         this.jadwalDokterArrayList = jadwalDokterArrayList;
         this.dbHelper = dbHelper;
     }
+
     @Override
     public int getCount() {
         return jadwalDokterArrayList.size();
@@ -45,6 +47,7 @@ public class JadwalAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
@@ -53,64 +56,82 @@ public class JadwalAdapter extends BaseAdapter {
 
         JadwalDokter jadwalDokter = jadwalDokterArrayList.get(position);
 
-        TextView listtanggal = convertView.findViewById(R.id.listtanggal);
-        TextView  listmulai = convertView.findViewById(R.id.listwaktumulai);
-        TextView  listakhir = convertView.findViewById(R.id.listwaktuberakhir);
+        TextView listdokter = convertView.findViewById(R.id.listdokter);
+        TextView listhari = convertView.findViewById(R.id.listhari);
+        TextView listwaktu = convertView.findViewById(R.id.listwaktu);
+
+        Dokter dokter = dbHelper.getDokterById(jadwalDokter.getPK_id_dokter());
+        listdokter.setText(dokter.getNama_dokter());
+
+        String hari = transformasiHari(jadwalDokter.getHari());
+
+        listhari.setText(hari);
+
+        String formattedwaktu = jadwalDokter.getWaktu_mulai() + " - " + jadwalDokter.getWaktu_berakhir();
+        listwaktu.setText(formattedwaktu);
 
         ImageButton updateButton = convertView.findViewById(R.id.updateButton);
         ImageButton deleteButton = convertView.findViewById(R.id.deleteButton);
         ImageButton detailButton = convertView.findViewById(R.id.detailButton);
 
-        String formattedTanggal = jadwalDokter.getTanggal().toString();
-        String formattedWaktuMulai = jadwalDokter.getWaktu_mulai().toString();
-        String formattedWaktuBerakhir = jadwalDokter.getWaktu_berakhir().toString();
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, UpdateJadwal.class);
+                intent.putExtra("id_jadwal", jadwalDokter.getId_jadwal());
+                context.startActivity(intent);
+            }
+        });
 
-        listtanggal.setText(formattedTanggal);
-        listmulai.setText(formattedWaktuMulai);
-        listakhir.setText(formattedWaktuBerakhir);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Konfirmasi Hapus");
+                builder.setMessage("Anda yakin ingin menghapus data ini?");
+                builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dbHelper.deleteJadwal(jadwalDokter.getId_jadwal());
+                        jadwalDokterArrayList.remove(position);
+                        notifyDataSetChanged();
 
+                        Toast.makeText(context, "Data berhasil dihapus", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing, dismiss the dialog
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
 
-//        updateButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(context, UpdateDokter.class);
-//                intent.putExtra("id_dokter", dokter.getId_dokter());
-//                intent.putExtra("nama_dokter", dokter.getNama_dokter());
-//                intent.putExtra("alamat_dokter", dokter.getAlamat());
-//                intent.putExtra("jenis_kelamin", dokter.getJenis_kelamin());
-//                intent.putExtra("id_sps", dokter.getId_spesialis());
-//                intent.putExtra("id_klinikk", dokter.getId_klinik());
-//                context.startActivity(intent);
-//            }
-//        });
-//
-//        deleteButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//                builder.setTitle("Konfirmasi Hapus");
-//                builder.setMessage("Anda yakin ingin menghapus data ini?");
-//                builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dbHelper.deleteDokter(dokter.getId_dokter());
-//                        DokterArrayList.remove(position);
-//                        notifyDataSetChanged();
-//
-//                        Toast.makeText(context, "Data berhasil dihapus", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//                builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        // Do nothing, dismiss the dialog
-//                    }
-//                });
-//                AlertDialog dialog = builder.create();
-//                dialog.show();
-//            }
-//        });
+        detailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "detail", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return convertView;
+    }
+
+    private String transformasiHari(String hari) {
+        if ("senin,selasa,rabu,kamis,jumat,sabtu,minggu".equals(hari)) {
+            return "setiap hari";
+        }
+        // Tambahkan spasi setelah setiap koma
+        hari = hari.replaceAll(",", ", ");
+
+        // Ubah tanda koma terakhir menjadi ' & '
+        int lastCommaIndex = hari.lastIndexOf(",");
+        if (lastCommaIndex != -1) {
+            hari = new StringBuilder(hari).replace(lastCommaIndex, lastCommaIndex + 1, " &").toString();
+        }
+        return hari;
     }
 }

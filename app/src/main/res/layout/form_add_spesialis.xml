@@ -59,7 +59,7 @@
                     android:id="@+id/nama_spesialis"
                     android:textSize="14sp"
                     android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:hint="Spesialis"/>
             </LinearLayout>
 
@@ -76,7 +76,7 @@
 
                 <EditText
                     android:id="@+id/deskripsi_spesialis"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Deskripsi"
                     android:textSize="14sp" />

@@ -33,7 +33,7 @@
             android:exported="true">
         </activity>
         <activity
-            android:name=".rawatjalan.RawatJalan"
+            android:name=".rawatjalan.AddRawatJalan"
             android:exported="true">
         </activity>
         <activity
@@ -81,7 +81,15 @@
             android:exported="true">
         </activity>
         <activity
+            android:name=".jadwaldokter.ViewJadwal"
+            android:exported="true">
+        </activity>
+        <activity
             android:name=".jadwaldokter.AddJadwal"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".jadwaldokter.UpdateJadwal"
             android:exported="true">
         </activity>
     </application>

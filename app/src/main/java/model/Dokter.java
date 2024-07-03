@@ -3,17 +3,11 @@ package model;
 import java.io.Serializable;
 
 public class Dokter implements Serializable {
-
     private int id_dokter;
-
     private String nama_dokter;
-
     private int umur;
-
     private String alamat ;
-
     private String jenis_kelamin;
-
     private int id_spesialis;
     private String nama_spesialis;
     private int id_klinik;

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -37,17 +38,17 @@
 
                 <TextView
                     android:id="@+id/r2zkwtug8tuf"
+                    android:layout_width="186dp"
+                    android:layout_height="wrap_content"
+                    android:text="Daftar Rawat Jalan"
+                    android:textAlignment="center"
                     android:textColor="#000000"
                     android:textSize="17sp"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:text="Daftar Rawat Jalan"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold"/>
             </LinearLayout>
+
             <LinearLayout
-                android:id="@+id/rs14msdrpc7h"
+                android:id="@+id/nama"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/linetextbox"
@@ -57,112 +58,141 @@
                 android:layout_marginHorizontal="27dp"
                 android:orientation="vertical">
                 <TextView
-                    android:id="@+id/rlt93uchuob"
+                    android:id="@+id/txt_nama_pasien"
                     android:textColor="#828282"
                     android:textSize="14sp"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Nama Pasien"/>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/rjtfjt1ji3yi"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/linetextbox"
-                android:paddingVertical="14dp"
-                android:paddingHorizontal="17dp"
-                android:layout_marginBottom="13dp"
-                android:layout_marginHorizontal="27dp"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/ri5mgxsuw9rk"
+                    android:hint="Nama Pasien"
+                    />
+                <EditText
+                    android:id="@+id/namapasien"
                     android:textColor="#828282"
                     android:textSize="14sp"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="Email"
+                    android:layout_height="50dp"
+                    android:layout_width="match_parent"
+                    android:hint="nama"
                     />
             </LinearLayout>
+
+
+
+            <!-- Combo box for Spesialis -->
             <LinearLayout
-                android:id="@+id/r63gzu73b6j6"
+                android:id="@+id/klinik"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
                 android:background="@drawable/linetextbox"
                 android:paddingVertical="14dp"
                 android:paddingHorizontal="17dp"
                 android:layout_marginBottom="14dp"
                 android:layout_marginHorizontal="27dp"
-                android:orientation="horizontal">
+                android:orientation="vertical">
                 <TextView
-                    android:id="@+id/ry9mri7bq5f"
+                    android:id="@+id/txt_klinik"
                     android:textColor="#828282"
                     android:textSize="14sp"
-                    android:layout_marginEnd="4dp"
                     android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:text="Pilih Klinik"
+                    android:layout_width="wrap_content"
+                    android:hint="Klinik"
                     />
-
+                <Spinner
+                    android:id="@+id/spinner_klinik"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:entries="@array/klinik_array"
+                    android:spinnerMode="dropdown"/>
             </LinearLayout>
+
             <LinearLayout
-                android:id="@+id/rirsukd13ajr"
+                android:id="@+id/dokter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
                 android:background="@drawable/linetextbox"
                 android:paddingVertical="14dp"
                 android:paddingHorizontal="17dp"
-                android:layout_marginBottom="13dp"
+                android:layout_marginBottom="14dp"
                 android:layout_marginHorizontal="27dp"
-                android:orientation="horizontal">
+                android:orientation="vertical">
                 <TextView
-                    android:id="@+id/rjw64matkcw"
+                    android:id="@+id/txt_dokter"
                     android:textColor="#828282"
                     android:textSize="14sp"
-                    android:layout_marginEnd="4dp"
                     android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:text="Pilih Dokter"
+                    android:layout_width="wrap_content"
+                    android:hint="Dokter"
                     />
-
+                <Spinner
+                    android:id="@+id/spinner_dokter"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:entries="@array/dokter_array"
+                    android:spinnerMode="dropdown"/>
             </LinearLayout>
+
             <LinearLayout
-                android:id="@+id/rnimp2eavsl8"
+                android:id="@+id/jadwal_dokter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
                 android:background="@drawable/linetextbox"
                 android:paddingVertical="14dp"
                 android:paddingHorizontal="17dp"
-                android:layout_marginBottom="220dp"
+                android:layout_marginBottom="14dp"
                 android:layout_marginHorizontal="27dp"
-                android:orientation="horizontal">
+                android:orientation="vertical">
                 <TextView
-                    android:id="@+id/r7d1u9e7d2g"
+                    android:id="@+id/txt_jadwal_dokter"
                     android:textColor="#828282"
                     android:textSize="14sp"
-                    android:layout_marginEnd="4dp"
                     android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:text="Pilih Jadwal Praktek"
+                    android:layout_width="wrap_content"
+                    android:hint="Jadwal Praktek"
                     />
+                <Spinner
+                    android:id="@+id/spinner_jadwal_dokter"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:entries="@array/jadwal_dokter_array"
+                    android:spinnerMode="dropdown"/>
+            </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/tanggalrawatjalan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/linetextbox"
+                android:paddingVertical="14dp"
+                android:paddingHorizontal="17dp"
+                android:layout_marginBottom="14dp"
+                android:layout_marginHorizontal="27dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/txt_tanggal"
+                    android:textColor="#828282"
+                    android:textSize="14sp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:hint="Tanggal"
+                    />
+                <Spinner
+                    android:id="@+id/spinner_tanggal"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:entries="@array/jadwal_dokter_array"
+                    android:spinnerMode="dropdown"/>
             </LinearLayout>
 
             <Button
+                android:id="@+id/btnsimpan"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
-                android:id="@+id/btnsimpan"
-                android:text="Simpan"
-                android:textSize="18dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="15dp"
                 android:backgroundTint="@color/blue"
-                app:cornerRadius="17dp"
-                android:layout_gravity="center"/>
+                android:textColor="@color/white"
+                android:text="Simpan"
+                android:textSize="18dp"
+                app:cornerRadius="17dp" />
 
         </LinearLayout>
     </ScrollView>
