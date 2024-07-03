@@ -13,6 +13,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.gosehat.R;
 import com.example.gosehat.dokter.ViewDokter;
 import com.example.gosehat.jadwaldokter.AddJadwal;
+import com.example.gosehat.jadwaldokter.ViewJadwal;
 import com.example.gosehat.klinik.ViewKlinik;
 import com.example.gosehat.spesialis.ViewSpesialis;
 
@@ -50,7 +51,7 @@ public class DashboardAdmin extends AppCompatActivity {
         jadwal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DashboardAdmin.this, AddJadwal.class);
+                Intent intent = new Intent(DashboardAdmin.this, ViewJadwal.class);
                 startActivity(intent);
             }
         });

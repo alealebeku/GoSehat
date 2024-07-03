@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import model.Dokter;
 import model.JadwalDokter;
 import model.Klinik;
+import model.RawatJalan;
 import model.Spesialis;
 import model.User;
 
@@ -58,17 +59,22 @@ public class DbHelper extends SQLiteOpenHelper {
     // TABEL JADWAL
     public static final String TABLE_JADWAL = "tb_jadwal";
     public static final String id_jadwal = "id_jadwal";
-    public static final String PK_id_dokter = "PK_id_dokter";
-    public static final String tanggal = "tanggal";
+    public static final String PK_id_dokter = "id_dokter";
+    public static final String hari = "hari";
     public static final String waktu_mulai = "waktu_mulai";
     public static final String waktu_berakhir = "waktu_berakhir";
-    public static final String status = "status";
+    public static final String status_jadwal = "status";
 
-    //TABEL DETAIL DOKTER JADWAL
-    public static final String TABLE_DETAIL_DOKTER_JADWAL = "tb_detail_dokter_jadwal";
-    public static final String iddokter = "iddokter";
-    public static final String idjadwal = "idjadwal";
-
+    // TABEL RAWAT JALAN
+    public static final String TABLE_RAWAT_JALAN = "tb_rawat_jalan";
+    public static final String id_rawat_jalan = "id_rawat_jalan";
+    public static final String fk_rawat_jalan_pasien = "id_pasien";
+    public static final String fk_rawat_jalan_klinik = "id_klinik";
+    public static final String fk_rawat_jalan_dokter = "id_dokter";
+    public static final String fk_rawat_jalan_jadwal_dokter = "id_jadwal";
+    public static final String tanggal = "tanggal";
+    public static final String nomor_antrian = "nomor_antrian";
+    public static final String status_rawat_jalan = "status";
 
     private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER + " ("
             + id_user + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -100,11 +106,17 @@ public class DbHelper extends SQLiteOpenHelper {
             + tanggal + " TEXT, "
             + waktu_mulai + " TEXT, "
             + waktu_berakhir + " TEXT, "
-            + status + " TEXT);";
+            + status_jadwal + " TEXT);";
 
-    private static final String CREATE_TABLE_DETAIL_DOKTER_JADWAL = "CREATE TABLE " + TABLE_DETAIL_DOKTER_JADWAL + " ("
-            + iddokter + " INTEGER, "
-            + idjadwal + " INTEGER);";
+    private static final String CREATE_TABLE_RAWAT_JALAN = "CREATE TABLE " + TABLE_RAWAT_JALAN + " ("
+            + id_rawat_jalan + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + fk_rawat_jalan_pasien + " INTEGER, "
+            + fk_rawat_jalan_klinik + " INTEGER, "
+            + fk_rawat_jalan_dokter + " INTEGER, "
+            + fk_rawat_jalan_jadwal_dokter + " INTEGER, "
+            + tanggal + " TEXT, "
+            + nomor_antrian + " TEXT, "
+            + status_rawat_jalan + " INTEGER);";
 
 
     public DbHelper(Context context) {
@@ -119,7 +131,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_KLINIK);
         db.execSQL(CREATE_TABLE_DOKTER);
         db.execSQL(CREATE_TABLE_JADWAL);
-        db.execSQL(CREATE_TABLE_DETAIL_DOKTER_JADWAL);
+        db.execSQL(CREATE_TABLE_RAWAT_JALAN);
     }
 
     @Override
@@ -129,7 +141,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_KLINIK);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DOKTER);
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_JADWAL);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DETAIL_DOKTER_JADWAL);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RAWAT_JALAN);
         onCreate(db);
     }
 
@@ -372,6 +384,29 @@ public class DbHelper extends SQLiteOpenHelper {
         return dokter;
     }
 
+    public ArrayList<Dokter> getDokterByKlinik(int id) {
+        ArrayList<Dokter> dokters = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_DOKTER + " WHERE " + id_klinikk + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
+        if (cursor.moveToFirst()) {
+            do {
+                Dokter dokter = new Dokter();
+                dokter.setId_dokter(cursor.getInt(cursor.getColumnIndexOrThrow(id_dokter)));
+                dokter.setNama_dokter(cursor.getString(cursor.getColumnIndexOrThrow(nama_dokter)));
+                dokter.setUmur(cursor.getInt(cursor.getColumnIndexOrThrow(umur)));
+                dokter.setAlamat(cursor.getString(cursor.getColumnIndexOrThrow(alamat)));
+                dokter.setJenis_kelamin(cursor.getString(cursor.getColumnIndexOrThrow(jenis_kelamin)));
+                dokter.setId_spesialis(cursor.getInt(cursor.getColumnIndexOrThrow(id_sps)));
+                dokter.setId_klinik(cursor.getInt(cursor.getColumnIndexOrThrow(id_klinikk)));
+                dokters.add(dokter);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return dokters;
+    }
+
     public String getNamaSpesialisById(int idSpesialis) {
         SQLiteDatabase db = this.getReadableDatabase();
         String namaSpesialis = null;
@@ -399,42 +434,138 @@ public class DbHelper extends SQLiteOpenHelper {
     public boolean insertjadwal(JadwalDokter jadwalDokter) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put(hari, jadwalDokter.getHari());
+        values.put(PK_id_dokter, jadwalDokter.getPK_id_dokter());
+        values.put(hari, jadwalDokter.getHari());
+        values.put(waktu_mulai, jadwalDokter.getWaktu_mulai());
+        values.put(waktu_berakhir, jadwalDokter.getWaktu_berakhir());
+        values.put(status_jadwal, jadwalDokter.getStatus());
 
-        // Format tanggal dalam bentuk string yang sesuai untuk SQLite
-        String formattedTanggal = jadwalDokter.getTanggal().toString();
-        values.put("tanggal", formattedTanggal);
-
-        // Format waktu mulai dan waktu berakhir dalam bentuk string yang sesuai untuk SQLite
-        String formattedWaktuMulai = jadwalDokter.getWaktu_mulai().toString();
-        String formattedWaktuBerakhir = jadwalDokter.getWaktu_berakhir().toString();
-        values.put("waktu_mulai", formattedWaktuMulai);
-        values.put("waktu_berakhir", formattedWaktuBerakhir);
-
-        values.put("status", jadwalDokter.getStatus());
-
-        long result = db.insert("TABLE_JADWAL", null, values);
+        long result = db.insert(TABLE_JADWAL, null, values);
         db.close();
 
         return result != -1;
     }
 
-//    public ArrayList<JadwalDokter> getAlljadwal() {
-//        ArrayList<JadwalDokter> jadwalDokters = new ArrayList<>();
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_JADWAL, null);
-//
-//        if (cursor.moveToFirst()) {
-//            do {
-//                JadwalDokter jadwalDokter = new JadwalDokter();
-//                jadwalDokter.setId_jadwal(cursor.getInt(cursor.getColumnIndexOrThrow(id_jadwal)));
-//                jadwalDokter.setId_dokter(cursor.getInt(cursor.getColumnIndexOrThrow(PK_id_dokter)));
-//                jadwalDokter.setTanggal(cursor.getString(cursor.getColumnIndexOrThrow(tanggal)));
-//
-//                jadwalDokters.add(jadwalDokter);
-//            } while (cursor.moveToNext());
-//        }
-//        cursor.close();
-//        db.close();
-//        return kliniks;
-//    }
+    public ArrayList<JadwalDokter> getAllJadwal() {
+        ArrayList<JadwalDokter> jadwalDokters = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_JADWAL + " WHERE " + status_jadwal + " = 1", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                JadwalDokter jadwalDokter = new JadwalDokter();
+                jadwalDokter.setId_jadwal(cursor.getInt(cursor.getColumnIndexOrThrow(id_jadwal)));
+                jadwalDokter.setPK_id_dokter(cursor.getInt(cursor.getColumnIndexOrThrow(PK_id_dokter)));
+                jadwalDokter.setHari(cursor.getString(cursor.getColumnIndexOrThrow(hari)));
+                jadwalDokter.setWaktu_mulai(cursor.getString(cursor.getColumnIndexOrThrow(waktu_mulai)));
+                jadwalDokter.setWaktu_berakhir(cursor.getString(cursor.getColumnIndexOrThrow(waktu_berakhir)));
+                jadwalDokter.setStatus(cursor.getInt(cursor.getColumnIndexOrThrow(status_jadwal)));
+
+                jadwalDokters.add(jadwalDokter);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return jadwalDokters;
+    }
+
+    public JadwalDokter getJadwalById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        JadwalDokter jadwalDokter = null;
+        String query = "SELECT * FROM " + TABLE_JADWAL + " WHERE " + id_jadwal + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
+        if (cursor.moveToFirst()) {
+            jadwalDokter = new JadwalDokter();
+            jadwalDokter.setId_jadwal(cursor.getInt(cursor.getColumnIndexOrThrow(id_jadwal)));
+            jadwalDokter.setPK_id_dokter(cursor.getInt(cursor.getColumnIndexOrThrow(PK_id_dokter)));
+            jadwalDokter.setHari(cursor.getString(cursor.getColumnIndexOrThrow(hari)));
+            jadwalDokter.setWaktu_mulai(cursor.getString(cursor.getColumnIndexOrThrow(waktu_mulai)));
+            jadwalDokter.setWaktu_berakhir(cursor.getString(cursor.getColumnIndexOrThrow(waktu_berakhir)));
+            jadwalDokter.setStatus(cursor.getInt(cursor.getColumnIndexOrThrow(status_jadwal)));
+        }
+        cursor.close();
+        return jadwalDokter;
+    }
+
+    public ArrayList<JadwalDokter> getJadwalByDokter(int id) {
+        ArrayList<JadwalDokter> jadwalDokters = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_JADWAL + " WHERE " + PK_id_dokter + " = ?" + " AND " + status_jadwal  + " = 1";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                JadwalDokter jadwalDokter = new JadwalDokter();
+                jadwalDokter.setId_jadwal(cursor.getInt(cursor.getColumnIndexOrThrow(id_jadwal)));
+                jadwalDokter.setPK_id_dokter(cursor.getInt(cursor.getColumnIndexOrThrow(PK_id_dokter)));
+                jadwalDokter.setHari(cursor.getString(cursor.getColumnIndexOrThrow(hari)));
+                jadwalDokter.setWaktu_mulai(cursor.getString(cursor.getColumnIndexOrThrow(waktu_mulai)));
+                jadwalDokter.setWaktu_berakhir(cursor.getString(cursor.getColumnIndexOrThrow(waktu_berakhir)));
+                jadwalDokter.setStatus(cursor.getInt(cursor.getColumnIndexOrThrow(status_jadwal)));
+
+                jadwalDokters.add(jadwalDokter);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return jadwalDokters;
+    }
+
+    public boolean updateJadwal(JadwalDokter jadwalDokter) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(PK_id_dokter, jadwalDokter.getPK_id_dokter());
+        values.put(hari, jadwalDokter.getHari());
+        values.put(waktu_mulai, jadwalDokter.getWaktu_mulai());
+        values.put(waktu_berakhir, jadwalDokter.getWaktu_berakhir());
+        values.put(status_jadwal, jadwalDokter.getStatus());
+
+        int result = db.update(TABLE_JADWAL, values, id_jadwal + " = ?", new String[]{String.valueOf(jadwalDokter.getId_jadwal())});
+        db.close();
+
+        return result > 0;
+    }
+
+    public boolean deleteJadwal(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(status_jadwal, 0);
+
+        int result = db.update(TABLE_JADWAL, values, id_jadwal + " = ?", new String[]{String.valueOf(id)});
+        db.close();
+
+        return result > 0;
+    }
+
+    //----------------------------------------RAWAT JALAN----------------------------------------------
+    public boolean insertRawatJalan(RawatJalan rawatJalan) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(fk_rawat_jalan_pasien, rawatJalan.getId_pasien());
+        values.put(fk_rawat_jalan_klinik, rawatJalan.getId_klinik());
+        values.put(fk_rawat_jalan_dokter, rawatJalan.getId_dokter());
+        values.put(fk_rawat_jalan_jadwal_dokter, rawatJalan.getId_jadwal());
+        values.put(tanggal, rawatJalan.getTanggal());
+        values.put(nomor_antrian, rawatJalan.getNomor_antrian());
+        values.put(status_rawat_jalan, rawatJalan.getStatus());
+
+        long result = db.insert(TABLE_RAWAT_JALAN, null, values);
+        db.close();
+
+        return result != -1;
+    }
+
+    public int getNomorUrut(int idDokter, int idJadwalDokter, String tanggalRawatJalan) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT COUNT(*) FROM " + TABLE_RAWAT_JALAN + " WHERE " + fk_rawat_jalan_dokter + " = ? AND " + fk_rawat_jalan_jadwal_dokter + " = ? AND " + tanggal + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(idDokter), String.valueOf(idJadwalDokter), tanggalRawatJalan});
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        db.close();
+        return count;
+    }
 }

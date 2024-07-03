@@ -30,7 +30,7 @@
             app:srcCompat="@drawable/headerdashboard" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imageViewProfil"
             android:layout_width="42dp"
             android:layout_height="35dp"
             android:layout_marginTop="4dp"
@@ -79,6 +79,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
+            android:id="@+id/monitorantrian2"
             android:layout_width="321dp"
             android:layout_height="79dp"
             android:layout_marginTop="272dp"
@@ -100,6 +101,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/monitorantrian1"
             android:layout_width="321dp"
             android:layout_height="79dp"
             android:layout_marginTop="196dp"

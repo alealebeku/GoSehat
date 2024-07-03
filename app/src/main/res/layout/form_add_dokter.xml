@@ -60,7 +60,7 @@
 
                 <EditText
                     android:id="@+id/nmdokter"
-                    android:layout_width="75dp"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:hint="Nama"
                     android:textColor="#828282"
@@ -82,7 +82,7 @@
                     android:textColor="#828282"
                     android:textSize="14sp"
                     android:layout_height="50dp"
-                    android:layout_width="75dp"
+                    android:layout_width="match_parent"
                     android:hint="Umur"
                     />
             </LinearLayout>
@@ -100,7 +100,7 @@
 
                 <EditText
                     android:id="@+id/almtdokter"
-                    android:layout_width="81dp"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:hint="Alamat"
                     android:textColor="#828282"

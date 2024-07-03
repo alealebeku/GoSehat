@@ -100,7 +100,7 @@ public class UpdateDokter extends AppCompatActivity {
                     namaklinik.add(klinik.getNamaklinik());
                 }
 
-                ArrayAdapter<String> klinikadapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, namaSpesialisList);
+                ArrayAdapter<String> klinikadapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, namaklinik);
                 klinikadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 idklinik.setAdapter(klinikadapter);
 
