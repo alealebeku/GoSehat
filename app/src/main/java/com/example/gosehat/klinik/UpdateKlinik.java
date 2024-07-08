@@ -55,6 +55,7 @@ public class UpdateKlinik extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(UpdateKlinik.this, ViewKlinik.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

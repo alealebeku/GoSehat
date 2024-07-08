@@ -3,11 +3,13 @@ package com.example.gosehat.jadwaldokter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gosehat.R;
+import com.example.gosehat.dashboard.DashboardAdmin;
 import com.example.gosehat.klinik.AddKlinik;
 import com.example.gosehat.klinik.KlinikAdapter;
 import com.example.gosehat.klinik.ViewKlinik;
@@ -47,6 +49,16 @@ public class ViewJadwal extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ViewJadwal.this, AddJadwal.class);
                 startActivity(intent);
+            }
+        });
+
+        ImageView back = findViewById(R.id.iconback);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewJadwal.this, DashboardAdmin.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

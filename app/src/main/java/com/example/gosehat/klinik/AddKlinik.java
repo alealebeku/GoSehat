@@ -62,6 +62,7 @@ public class AddKlinik extends AppCompatActivity {
             Klinik klinik1 = new Klinik();
             klinik1.setNamaklinik(klinik);
             klinik1.setAlamat(alamat);
+            klinik1.setStatus(1);
 
             DbHelper dbHelper = new DbHelper(this);
             boolean isInserted = dbHelper.insertKlinik(klinik1);
@@ -78,6 +79,8 @@ public class AddKlinik extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(AddKlinik.this, DashboardAdmin.class);
+                startActivity(intent);
                 finish();
             }
         });

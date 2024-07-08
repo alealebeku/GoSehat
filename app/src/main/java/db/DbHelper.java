@@ -28,9 +28,11 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String TABLE_USER = "tb_user";
     public static final String id_user = "id";
     public static final String nama_lengkap = "nama_lengkap";
+    public static final String jenis_kelamin_user = "jenis_kelamin";
+    public static final String tanggal_lahir = "tanggal_lahir";
     public static final String email = "email";
+    public static final String alamat_user = "alamat";
     public static final String role = "role";
-    public static final String username = "username";
     public static final String password = "password";
 
 
@@ -39,27 +41,30 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String id_spesialis = "id";
     public static final String nama_spesilis = "nama_spesilis";
     public static final String deskripsi_spesialis = "deskripsi_spesialis";
+    public static final String status_spesialis = "status";
 
     // TABEL KLINIK
     public static final String TABLE_KLINIK = "tb_klinik";
     public static final String id_klinik = "id";
     public static final String nama_klinik = "nama_klinik";
     public static final String alamat_klinik = "alamat_klinik";
+    public static final String status_klinik = "status";
 
     // TABEL DOKTER
     public static final String TABLE_DOKTER = "tb_dokter";
     public static final String id_dokter = "id_dokter";
     public static final String nama_dokter = "nama_dokter";
     public static final String umur = "umur";
-    public static final String alamat = "alamat";
-    public static final String jenis_kelamin = "jenis_kelamin";
-    public static final String id_sps = "id_sps";
-    public static final String id_klinikk = "id_klinikk";
+    public static final String alamat_dokter = "alamat";
+    public static final String jenis_kelamin_dokter = "jenis_kelamin";
+    public static final String fk_dokter_spesialis = "id_spesialis";
+    public static final String fk_dokter_klinik = "id_klinik";
+    public static final String status_dokter = "status";
 
     // TABEL JADWAL
     public static final String TABLE_JADWAL = "tb_jadwal";
     public static final String id_jadwal = "id_jadwal";
-    public static final String PK_id_dokter = "id_dokter";
+    public static final String fk_jadwal_dokter = "id_dokter";
     public static final String hari = "hari";
     public static final String waktu_mulai = "waktu_mulai";
     public static final String waktu_berakhir = "waktu_berakhir";
@@ -79,34 +84,40 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER + " ("
             + id_user + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + nama_lengkap + " TEXT, "
+            + jenis_kelamin_user + " TEXT, "
+            + tanggal_lahir + " TEXT, "
             + role + " TEXT, "
             + email + " TEXT, "
-            + username + " TEXT, "
+            + alamat_user + " TEXT, "
             + password + " TEXT);";
     private static final String CREATE_TABLE_SPESIALIS = "CREATE TABLE " + TABLE_SPESIALIS + " ("
             + id_spesialis + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + nama_spesilis + " TEXT, "
-            + deskripsi_spesialis + " TEXT);";
+            + deskripsi_spesialis + " TEXT, "
+            + status_spesialis + " INTEGER);";
 
     private static final String CREATE_TABLE_KLINIK = "CREATE TABLE " + TABLE_KLINIK + " ("
             + id_klinik + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + nama_klinik + " TEXT, "
-            + alamat_klinik + " TEXT);";
+            + alamat_klinik + " TEXT, "
+            + status_klinik + " INTEGER);";
     private static final String CREATE_TABLE_DOKTER = "CREATE TABLE " + TABLE_DOKTER + " ("
             + id_dokter + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + nama_dokter + " TEXT, "
             + umur + " INTEGER, "
-            + alamat + " TEXT, "
-            + jenis_kelamin + " TEXT, "
-            + id_sps + " INTEGER, "
-            + id_klinikk + " INTEGER);";
+            + alamat_dokter + " TEXT, "
+            + jenis_kelamin_dokter + " TEXT, "
+            + fk_dokter_spesialis + " INTEGER, "
+            + fk_dokter_klinik + " INTEGER, "
+            + status_dokter + " INTEGER);";
 
     private static final String CREATE_TABLE_JADWAL = "CREATE TABLE " + TABLE_JADWAL + " ("
             + id_jadwal + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + tanggal + " TEXT, "
+            + fk_jadwal_dokter + " INTEGER, "
+            + hari + " TEXT, "
             + waktu_mulai + " TEXT, "
             + waktu_berakhir + " TEXT, "
-            + status_jadwal + " TEXT);";
+            + status_jadwal + " INTEGER);";
 
     private static final String CREATE_TABLE_RAWAT_JALAN = "CREATE TABLE " + TABLE_RAWAT_JALAN + " ("
             + id_rawat_jalan + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -150,15 +161,50 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(nama_lengkap, user.getNama());
+        values.put(jenis_kelamin_user, user.getJenisKelamin());
+        values.put(tanggal_lahir, user.getTanggalLahir());
         values.put(role, user.getRole());
-        values.put(email, user.getEmail());
-        values.put(username, user.getUsername());
+        values.put(email, user.getAlamat());
         values.put(password, user.getPassword());
 
         long result = db.insert(TABLE_USER, null, values);
         db.close();
 
         return result != -1;
+    }
+
+    public User getUserByEmail(String userEmail) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        User user = null;
+        String query = "SELECT * FROM " + TABLE_USER + " WHERE " + email + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userEmail)});
+        if (cursor.moveToFirst()) {
+            user = new User();
+            user.setId(cursor.getInt(cursor.getColumnIndexOrThrow(id_user)));
+            user.setNama(cursor.getString(cursor.getColumnIndexOrThrow(nama_lengkap)));
+            user.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(email)));
+            user.setRole(cursor.getString(cursor.getColumnIndexOrThrow(role)));
+            user.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(password)));
+        }
+        cursor.close();
+        return user;
+    }
+
+    public User getUserById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        User user = null;
+        String query = "SELECT * FROM " + TABLE_USER + " WHERE " + id_user + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
+        if (cursor.moveToFirst()) {
+            user = new User();
+            user.setId(cursor.getInt(cursor.getColumnIndexOrThrow(id_user)));
+            user.setNama(cursor.getString(cursor.getColumnIndexOrThrow(nama_lengkap)));
+            user.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(email)));
+            user.setRole(cursor.getString(cursor.getColumnIndexOrThrow(role)));
+            user.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(password)));
+        }
+        cursor.close();
+        return user;
     }
 
     public ArrayList<User> getUsernameEmail() {
@@ -197,6 +243,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         values.put("nama_spesilis", spesialis.getNama());
         values.put("deskripsi_spesialis", spesialis.getDeskripsi());
+        values.put("status", spesialis.getStatus());
 
         long result = -1;
         try {
@@ -231,10 +278,15 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
         return spesialis;
     }
-    public void deleteSpesialis(int id) {
+    public boolean deleteSpesialis(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_SPESIALIS, id_spesialis + " = ?", new String[]{String.valueOf(id)});
+        ContentValues values = new ContentValues();
+        values.put(status_spesialis, 0);
+
+        int result = db.update(TABLE_SPESIALIS, values, id_spesialis + " = ?", new String[]{String.valueOf(id)});
         db.close();
+
+        return result > 0;
     }
     public boolean updateSpesialis(Spesialis spesialis) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -255,6 +307,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         values.put("nama_klinik", klinik.getNamaklinik());
         values.put("alamat_klinik", klinik.getAlamat());
+        values.put("status", klinik.getStatus());
 
         long result = -1;
         try {
@@ -288,10 +341,15 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
         return kliniks;
     }
-    public void deleteKlinik(int id) {
+    public boolean deleteKlinik(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_KLINIK, id_klinik + " = ?", new String[]{String.valueOf(id)});
+        ContentValues values = new ContentValues();
+        values.put(status_klinik, 0);
+
+        int result = db.update(TABLE_KLINIK, values, id_klinik + " = ?", new String[]{String.valueOf(id)});
         db.close();
+
+        return result > 0;
     }
     public boolean updateKlinik(Klinik klinik) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -312,10 +370,11 @@ public class DbHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(nama_dokter, dokter.getNama_dokter());
         values.put(umur, dokter.getUmur());
-        values.put(alamat, dokter.getAlamat());
-        values.put(jenis_kelamin, dokter.getJenis_kelamin());
-        values.put(id_sps, dokter.getId_spesialis());
-        values.put(id_klinikk, dokter.getId_klinik());
+        values.put(alamat_dokter, dokter.getAlamat());
+        values.put(jenis_kelamin_dokter, dokter.getJenis_kelamin());
+        values.put(fk_dokter_spesialis, dokter.getId_spesialis());
+        values.put(fk_dokter_klinik, dokter.getId_klinik());
+        values.put(status_dokter, dokter.getStatus());
 
         long result = db.insert(TABLE_DOKTER, null, values);
         db.close();
@@ -333,10 +392,10 @@ public class DbHelper extends SQLiteOpenHelper {
                 dokter.setId_dokter(cursor.getInt(cursor.getColumnIndexOrThrow(id_dokter)));
                 dokter.setNama_dokter(cursor.getString(cursor.getColumnIndexOrThrow(nama_dokter)));
                 dokter.setUmur(cursor.getInt(cursor.getColumnIndexOrThrow(umur)));
-                dokter.setAlamat(cursor.getString(cursor.getColumnIndexOrThrow(alamat)));
-                dokter.setJenis_kelamin(cursor.getString(cursor.getColumnIndexOrThrow(jenis_kelamin)));
-                dokter.setId_spesialis(cursor.getInt(cursor.getColumnIndexOrThrow(id_sps)));
-                dokter.setId_klinik(cursor.getInt(cursor.getColumnIndexOrThrow(id_klinikk)));
+                dokter.setAlamat(cursor.getString(cursor.getColumnIndexOrThrow(alamat_dokter)));
+                dokter.setJenis_kelamin(cursor.getString(cursor.getColumnIndexOrThrow(jenis_kelamin_dokter)));
+                dokter.setId_spesialis(cursor.getInt(cursor.getColumnIndexOrThrow(fk_dokter_spesialis)));
+                dokter.setId_klinik(cursor.getInt(cursor.getColumnIndexOrThrow(fk_dokter_klinik)));
 
                 dokters.add(dokter);
             } while (cursor.moveToNext());
@@ -345,20 +404,25 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
         return dokters;
     }
-    public void deleteDokter(int id) {
+    public boolean deleteDokter(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_DOKTER, id_dokter + " = ?", new String[]{String.valueOf(id)});
+        ContentValues values = new ContentValues();
+        values.put(status_dokter, 0);
+
+        int result = db.update(TABLE_DOKTER, values, id_dokter + " = ?", new String[]{String.valueOf(id)});
         db.close();
+
+        return result > 0;
     }
     public boolean updateDokter(Dokter dokter) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(nama_dokter, dokter.getNama_dokter());
         values.put(umur, dokter.getUmur());
-        values.put(alamat, dokter.getAlamat());
-        values.put(jenis_kelamin, dokter.getJenis_kelamin());
-        values.put(id_sps, dokter.getId_spesialis());
-        values.put(id_klinikk, dokter.getId_klinik());
+        values.put(alamat_dokter, dokter.getAlamat());
+        values.put(jenis_kelamin_dokter, dokter.getJenis_kelamin());
+        values.put(fk_dokter_spesialis, dokter.getId_spesialis());
+        values.put(fk_dokter_klinik, dokter.getId_klinik());
 
         int result = db.update(TABLE_DOKTER, values, id_dokter + " = ?", new String[]{String.valueOf(dokter.getId_dokter())});
         db.close();
@@ -376,9 +440,9 @@ public class DbHelper extends SQLiteOpenHelper {
             dokter.setId_dokter(cursor.getInt(cursor.getColumnIndexOrThrow(id_dokter)));
             dokter.setNama_dokter(cursor.getString(cursor.getColumnIndexOrThrow(nama_dokter)));
             dokter.setUmur(cursor.getInt(cursor.getColumnIndexOrThrow(umur)));
-            dokter.setAlamat(cursor.getString(cursor.getColumnIndexOrThrow(alamat)));
-            dokter.setJenis_kelamin(cursor.getString(cursor.getColumnIndexOrThrow(jenis_kelamin)));
-            dokter.setId_spesialis(cursor.getInt(cursor.getColumnIndexOrThrow(id_sps)));
+            dokter.setAlamat(cursor.getString(cursor.getColumnIndexOrThrow(alamat_dokter)));
+            dokter.setJenis_kelamin(cursor.getString(cursor.getColumnIndexOrThrow(jenis_kelamin_dokter)));
+            dokter.setId_spesialis(cursor.getInt(cursor.getColumnIndexOrThrow(fk_dokter_spesialis)));
         }
         cursor.close();
         return dokter;
@@ -387,7 +451,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public ArrayList<Dokter> getDokterByKlinik(int id) {
         ArrayList<Dokter> dokters = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_DOKTER + " WHERE " + id_klinikk + " = ?";
+        String query = "SELECT * FROM " + TABLE_DOKTER + " WHERE " + fk_dokter_klinik + " = ?";
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
         if (cursor.moveToFirst()) {
             do {
@@ -395,10 +459,10 @@ public class DbHelper extends SQLiteOpenHelper {
                 dokter.setId_dokter(cursor.getInt(cursor.getColumnIndexOrThrow(id_dokter)));
                 dokter.setNama_dokter(cursor.getString(cursor.getColumnIndexOrThrow(nama_dokter)));
                 dokter.setUmur(cursor.getInt(cursor.getColumnIndexOrThrow(umur)));
-                dokter.setAlamat(cursor.getString(cursor.getColumnIndexOrThrow(alamat)));
-                dokter.setJenis_kelamin(cursor.getString(cursor.getColumnIndexOrThrow(jenis_kelamin)));
-                dokter.setId_spesialis(cursor.getInt(cursor.getColumnIndexOrThrow(id_sps)));
-                dokter.setId_klinik(cursor.getInt(cursor.getColumnIndexOrThrow(id_klinikk)));
+                dokter.setAlamat(cursor.getString(cursor.getColumnIndexOrThrow(alamat_dokter)));
+                dokter.setJenis_kelamin(cursor.getString(cursor.getColumnIndexOrThrow(jenis_kelamin_dokter)));
+                dokter.setId_spesialis(cursor.getInt(cursor.getColumnIndexOrThrow(fk_dokter_spesialis)));
+                dokter.setId_klinik(cursor.getInt(cursor.getColumnIndexOrThrow(fk_dokter_klinik)));
                 dokters.add(dokter);
             } while (cursor.moveToNext());
         }
@@ -431,11 +495,11 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     //----------------------------------------JADWAL DOKTER----------------------------------------------
-    public boolean insertjadwal(JadwalDokter jadwalDokter) {
+    public boolean insertJadwal(JadwalDokter jadwalDokter) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(hari, jadwalDokter.getHari());
-        values.put(PK_id_dokter, jadwalDokter.getPK_id_dokter());
+        values.put(fk_jadwal_dokter, jadwalDokter.getPK_id_dokter());
         values.put(hari, jadwalDokter.getHari());
         values.put(waktu_mulai, jadwalDokter.getWaktu_mulai());
         values.put(waktu_berakhir, jadwalDokter.getWaktu_berakhir());
@@ -456,7 +520,7 @@ public class DbHelper extends SQLiteOpenHelper {
             do {
                 JadwalDokter jadwalDokter = new JadwalDokter();
                 jadwalDokter.setId_jadwal(cursor.getInt(cursor.getColumnIndexOrThrow(id_jadwal)));
-                jadwalDokter.setPK_id_dokter(cursor.getInt(cursor.getColumnIndexOrThrow(PK_id_dokter)));
+                jadwalDokter.setPK_id_dokter(cursor.getInt(cursor.getColumnIndexOrThrow(fk_jadwal_dokter)));
                 jadwalDokter.setHari(cursor.getString(cursor.getColumnIndexOrThrow(hari)));
                 jadwalDokter.setWaktu_mulai(cursor.getString(cursor.getColumnIndexOrThrow(waktu_mulai)));
                 jadwalDokter.setWaktu_berakhir(cursor.getString(cursor.getColumnIndexOrThrow(waktu_berakhir)));
@@ -478,7 +542,7 @@ public class DbHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             jadwalDokter = new JadwalDokter();
             jadwalDokter.setId_jadwal(cursor.getInt(cursor.getColumnIndexOrThrow(id_jadwal)));
-            jadwalDokter.setPK_id_dokter(cursor.getInt(cursor.getColumnIndexOrThrow(PK_id_dokter)));
+            jadwalDokter.setPK_id_dokter(cursor.getInt(cursor.getColumnIndexOrThrow(fk_jadwal_dokter)));
             jadwalDokter.setHari(cursor.getString(cursor.getColumnIndexOrThrow(hari)));
             jadwalDokter.setWaktu_mulai(cursor.getString(cursor.getColumnIndexOrThrow(waktu_mulai)));
             jadwalDokter.setWaktu_berakhir(cursor.getString(cursor.getColumnIndexOrThrow(waktu_berakhir)));
@@ -491,14 +555,14 @@ public class DbHelper extends SQLiteOpenHelper {
     public ArrayList<JadwalDokter> getJadwalByDokter(int id) {
         ArrayList<JadwalDokter> jadwalDokters = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_JADWAL + " WHERE " + PK_id_dokter + " = ?" + " AND " + status_jadwal  + " = 1";
+        String query = "SELECT * FROM " + TABLE_JADWAL + " WHERE " + fk_jadwal_dokter + " = ?" + " AND " + status_jadwal  + " = 1";
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
 
         if (cursor.moveToFirst()) {
             do {
                 JadwalDokter jadwalDokter = new JadwalDokter();
                 jadwalDokter.setId_jadwal(cursor.getInt(cursor.getColumnIndexOrThrow(id_jadwal)));
-                jadwalDokter.setPK_id_dokter(cursor.getInt(cursor.getColumnIndexOrThrow(PK_id_dokter)));
+                jadwalDokter.setPK_id_dokter(cursor.getInt(cursor.getColumnIndexOrThrow(fk_jadwal_dokter)));
                 jadwalDokter.setHari(cursor.getString(cursor.getColumnIndexOrThrow(hari)));
                 jadwalDokter.setWaktu_mulai(cursor.getString(cursor.getColumnIndexOrThrow(waktu_mulai)));
                 jadwalDokter.setWaktu_berakhir(cursor.getString(cursor.getColumnIndexOrThrow(waktu_berakhir)));
@@ -515,7 +579,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public boolean updateJadwal(JadwalDokter jadwalDokter) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(PK_id_dokter, jadwalDokter.getPK_id_dokter());
+        values.put(fk_jadwal_dokter, jadwalDokter.getPK_id_dokter());
         values.put(hari, jadwalDokter.getHari());
         values.put(waktu_mulai, jadwalDokter.getWaktu_mulai());
         values.put(waktu_berakhir, jadwalDokter.getWaktu_berakhir());

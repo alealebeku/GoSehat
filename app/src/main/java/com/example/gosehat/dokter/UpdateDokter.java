@@ -51,8 +51,8 @@ public class UpdateDokter extends AppCompatActivity {
         String umurdokter = intent.getStringExtra("umur");
         String alamatdokter = intent.getStringExtra("alamat");
         String jeniskelamin = intent.getStringExtra("jenis_kelamin");
-        int spesialisdokter = intent.getIntExtra("id_sps", -1);
-        int klinikdokter = intent.getIntExtra("id_klinikk", -1);
+        int spesialisdokter = intent.getIntExtra("id_spesialis", -1);
+        int klinikdokter = intent.getIntExtra("id_klinik", -1);
 
         dokterID = intent.getIntExtra("id_dokter", -1);
 
@@ -135,6 +135,7 @@ public class UpdateDokter extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(UpdateDokter.this, ViewDokter.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

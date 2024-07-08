@@ -26,7 +26,7 @@ import db.DbHelper;
 import model.User;
 
 public class Registrasi extends AppCompatActivity {
-    private EditText namalengkap, email, uname, konfirpw, pw;
+    private EditText namalengkap, email, konfirpw, pw;
     private Spinner role;
     private DbHelper dbHelper;
     private FirebaseAuth auth;
@@ -44,7 +44,6 @@ public class Registrasi extends AppCompatActivity {
         namalengkap = findViewById(R.id.namalengkap);
         email = findViewById(R.id.Email);
         role = findViewById(R.id.roleSpinner);
-        uname = findViewById(R.id.username);
         pw = findViewById(R.id.katasandi);
         konfirpw = findViewById(R.id.confirmkatasandi);
 
@@ -71,23 +70,22 @@ public class Registrasi extends AppCompatActivity {
             public void onClick(View v) {
                 String namaLengkap = namalengkap.getText().toString().trim();
                 String emailUser = email.getText().toString().trim();
-                String username = uname.getText().toString().trim();
                 String password = pw.getText().toString().trim();
                 String roleUser = role.getSelectedItem().toString();
                 String konfir = konfirpw.getText().toString();
 
-                if (namaLengkap.isEmpty() || emailUser.isEmpty() || username.isEmpty() || password.isEmpty() || roleUser.isEmpty()) {
+                if (namaLengkap.isEmpty() || emailUser.isEmpty() || password.isEmpty() || roleUser.isEmpty()) {
                     Toast.makeText(Registrasi.this, "Harap mengisi semua bidang", Toast.LENGTH_SHORT).show();
                 } else if (!password.equals(konfir)) {
                     Toast.makeText(Registrasi.this, "Kata sandi dan konfirmasi kata sandi tidak cocok", Toast.LENGTH_SHORT).show();
                 } else {
-                    registerUser(namaLengkap, emailUser, username, password, roleUser);
+                    registerUser(namaLengkap, emailUser, password, roleUser);
                 }
             }
         });
     }
 
-    private void registerUser(String namaLengkap, String emailUser, String username, String password, String roleUser) {
+    private void registerUser(String namaLengkap, String emailUser, String password, String roleUser) {
         auth.createUserWithEmailAndPassword(emailUser, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -103,7 +101,6 @@ public class Registrasi extends AppCompatActivity {
                                                     User user = new User();
                                                     user.setNama(namaLengkap);
                                                     user.setEmail(emailUser);
-                                                    user.setUsername(username);
                                                     user.setPassword(password);
                                                     user.setRole(roleUser);
 

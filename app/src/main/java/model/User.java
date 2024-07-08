@@ -5,27 +5,27 @@ import java.io.Serializable;
 public class User implements Serializable {
     private int id;
     private String nama;
+    private String jenisKelamin;
+    private String tanggalLahir;
     private String role;
     private String email;
-    private String username;
+    private String alamat;
     private String password;
+    private int status;
 
-    public User(int id, String nama, String role, String email, String username, String password) {
+    public User() {}
+
+    public User(int id, String nama, String jenisKelamin, String tanggalLahir, String role, String email, String alamat, String password, int status) {
         this.id = id;
         this.nama = nama;
+        this.jenisKelamin = jenisKelamin;
+        this.tanggalLahir = tanggalLahir;
         this.role = role;
         this.email = email;
-        this.username = username;
+        this.alamat = alamat;
         this.password = password;
+        this.status = status;
     }
-    public User(String nama, String role, String email, String username, String password) {
-        this.nama = nama;
-        this.role = role;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-    }
-    public User(){}
 
     public int getId() {
         return id;
@@ -41,6 +41,22 @@ public class User implements Serializable {
 
     public void setNama(String nama) {
         this.nama = nama;
+    }
+
+    public String getJenisKelamin() {
+        return jenisKelamin;
+    }
+
+    public void setJenisKelamin(String jenisKelamin) {
+        this.jenisKelamin = jenisKelamin;
+    }
+
+    public String getTanggalLahir() {
+        return tanggalLahir;
+    }
+
+    public void setTanggalLahir(String tanggalLahir) {
+        this.tanggalLahir = tanggalLahir;
     }
 
     public String getRole() {
@@ -59,12 +75,12 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public String getUsername() {
-        return username;
+    public String getAlamat() {
+        return alamat;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setAlamat(String alamat) {
+        this.alamat = alamat;
     }
 
     public String getPassword() {
@@ -73,5 +89,13 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

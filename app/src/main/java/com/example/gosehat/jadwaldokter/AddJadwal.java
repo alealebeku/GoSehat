@@ -1,12 +1,14 @@
 package com.example.gosehat.jadwaldokter;
 
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -15,6 +17,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gosehat.R;
+import com.example.gosehat.dashboard.DashboardAdmin;
+import com.example.gosehat.klinik.ViewKlinik;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -79,6 +83,16 @@ public class AddJadwal  extends AppCompatActivity {
                 saveData();
             }
         });
+
+        ImageView back = findViewById(R.id.iconback);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AddJadwal.this, DashboardAdmin.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void saveData() {
@@ -128,13 +142,13 @@ public class AddJadwal  extends AppCompatActivity {
             jadwalDokter.setStatus(1);
 
             DbHelper dbHelper = new DbHelper(this);
-            boolean isInserted = dbHelper.insertjadwal(jadwalDokter);
+            boolean isInserted = dbHelper.insertJadwal(jadwalDokter);
 
             if (isInserted) {
                 Toast.makeText(this, "Data jadwal berhasil disimpan", Toast.LENGTH_SHORT).show();
                 resetInputFields();
             } else {
-                Toast.makeText(this, "Gagal menyimpan data jadwal" + checkedHari + dokterId + waktu_mulai + waktu_berakhir, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Gagal menyimpan data jadwal", Toast.LENGTH_SHORT).show();
             }
         }
     }

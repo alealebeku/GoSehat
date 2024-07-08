@@ -6,11 +6,13 @@ public class Klinik  implements Serializable {
     private int id;
     private String namaklinik;
     private String alamat;
+    private int status;
 
-    public Klinik(int id, String namaklinik, String alamat) {
+    public Klinik(int id, String namaklinik, String alamat, int status) {
         this.id = id;
         this.namaklinik = namaklinik;
         this.alamat = alamat;
+        this.status = status;
     }
     public Klinik(){}
 
@@ -36,5 +38,13 @@ public class Klinik  implements Serializable {
 
     public void setAlamat(String alamat) {
         this.alamat = alamat;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }
