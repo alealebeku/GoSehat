@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -25,25 +26,34 @@ import model.Dokter;
 import model.JadwalDokter;
 import model.Klinik;
 import model.RawatJalan;
+import model.User;
 
 public class AddRawatJalan extends AppCompatActivity {
     private Spinner klinik, dokter, jadwalDokter, tanggal;
+    private EditText namaPasien;
     private Button buttonSave;
     private ArrayList<Klinik> klinikList;
     private ArrayList<Dokter> dokterList;
     private ArrayList<JadwalDokter> jadwalDokterList;
     private DbHelper dbHelper;
+    private User user;
+    private int userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.form_add_rawat_jalan);
+        dbHelper = new DbHelper(this);
+
+        Intent intent = getIntent();
+        userId = intent.getIntExtra("id_user", -1);
+        user =  dbHelper.getUserById(userId);
+        namaPasien = findViewById(R.id.namapasien);
+        namaPasien.setText(user.getNama());
 
         klinik = findViewById(R.id.spinner_klinik);
         dokter = findViewById(R.id.spinner_dokter);
         jadwalDokter = findViewById(R.id.spinner_jadwal_dokter);
         tanggal = findViewById(R.id.spinner_tanggal);
-
-        dbHelper = new DbHelper(this);
 
         //inisialisasi data klinik
         klinikList = dbHelper.getAllKlinik();

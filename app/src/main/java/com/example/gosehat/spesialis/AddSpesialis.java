@@ -35,6 +35,7 @@ public class AddSpesialis extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(AddSpesialis.this, ViewSpesialis.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -56,6 +57,7 @@ public class AddSpesialis extends AppCompatActivity {
             model.Spesialis spesialis1 = new model.Spesialis();
             spesialis1.setNama(spesialis);
             spesialis1.setDeskripsi(deskripsi);
+            spesialis1.setStatus(1);
 
             DbHelper dbHelper = new DbHelper(this);
             boolean isInserted = dbHelper.insertSpesialis(spesialis1);

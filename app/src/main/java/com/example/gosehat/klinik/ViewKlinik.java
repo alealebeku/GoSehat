@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gosehat.R;
 import com.example.gosehat.dashboard.DashboardAdmin;
+import com.example.gosehat.dashboard.DashboardPasien;
+import com.example.gosehat.user.ViewUser;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -54,6 +56,8 @@ public class ViewKlinik extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(ViewKlinik.this, DashboardAdmin.class);
+                startActivity(intent);
                 finish();
             }
         });

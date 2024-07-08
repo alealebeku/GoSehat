@@ -3,11 +3,14 @@ package com.example.gosehat.spesialis;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gosehat.R;
+import com.example.gosehat.dashboard.DashboardAdmin;
+import com.example.gosehat.klinik.ViewKlinik;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -44,6 +47,16 @@ public class ViewSpesialis extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ViewSpesialis.this, AddSpesialis.class);
                 startActivity(intent);
+            }
+        });
+
+        ImageView back = findViewById(R.id.iconback);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewSpesialis.this, DashboardAdmin.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

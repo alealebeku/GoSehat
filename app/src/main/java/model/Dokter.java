@@ -12,13 +12,14 @@ public class Dokter implements Serializable {
     private String nama_spesialis;
     private int id_klinik;
     private String nama_klinik;
+    private int status;
 
 
     public Dokter() {
 
     }
 
-    public Dokter(int id_dokter, String nama_dokter, int umur, String alamat, String jenis_kelamin, int id_spesialis, int id_klinik) {
+    public Dokter(int id_dokter, String nama_dokter, int umur, String alamat, String jenis_kelamin, int id_spesialis, int id_klinik, int status) {
         this.id_dokter = id_dokter;
         this.nama_dokter = nama_dokter;
         this.umur = umur;
@@ -26,6 +27,7 @@ public class Dokter implements Serializable {
         this.jenis_kelamin = jenis_kelamin;
         this.id_spesialis = id_spesialis;
         this.id_klinik = id_klinik;
+        this.status = status;
     }
 
     public int getId_klinik() {
@@ -100,5 +102,11 @@ public class Dokter implements Serializable {
         this.id_spesialis = id_spesialis;
     }
 
+    public int getStatus() {
+        return status;
+    }
 
+    public void setStatus(int status) {
+        this.status = status;
+    }
 }

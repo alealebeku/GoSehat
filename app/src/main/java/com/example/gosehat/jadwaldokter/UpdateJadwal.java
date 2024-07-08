@@ -60,12 +60,7 @@ public class UpdateJadwal extends AppCompatActivity {
 
         Intent intent = getIntent();
         jadwalID = intent.getIntExtra("id_jadwal", -1);
-//        String namadokter = intent.getStringExtra("nama_dokter");
-//        String umurdokter = intent.getStringExtra("umur");
-//        String alamatdokter = intent.getStringExtra("alamat");
-//        String jeniskelamin = intent.getStringExtra("jenis_kelamin");
         int idDokter = intent.getIntExtra("id_dokter", -1);
-//        int klinikdokter = intent.getIntExtra("id_klinikk", -1);
 
         jadwalID = intent.getIntExtra("id_jadwal", -1);
 
@@ -146,6 +141,7 @@ public class UpdateJadwal extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(UpdateJadwal.this, ViewJadwal.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

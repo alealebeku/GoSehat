@@ -82,7 +82,9 @@ public class Login extends AppCompatActivity {
                                                 startActivity(intent);
                                                 finish(); // Tutup activity saat ini
                                             } else if ("pasien".equalsIgnoreCase(role)) {
+                                                User users = dbHelper.getUserByEmail(akunemail);
                                                 Intent intent = new Intent(Login.this, DashboardPasien.class);
+                                                intent.putExtra("id_user", users.getId());
                                                 startActivity(intent);
                                                 finish(); // Tutup activity saat ini
                                             } else {

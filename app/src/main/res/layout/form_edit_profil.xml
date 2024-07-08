@@ -1,7 +1,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#FFFFFFFF"
+    android:background="#FFFFFF"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -37,16 +37,34 @@
 
                 <TextView
                     android:id="@+id/r2zkwtug8tuf"
-                    android:layout_width="235dp"
+                    android:layout_width="186dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Edit Profil"
+                    android:text="Edit Data Pasien"
+                    android:textAlignment="center"
                     android:textColor="#000000"
                     android:textSize="17sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
             </LinearLayout>
             <LinearLayout
-                android:id="@+id/nama_lengkap"
+                android:id="@+id/rs14msdrpc9h"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/linetextbox"
+                android:paddingVertical="14dp"
+                android:paddingHorizontal="17dp"
+                android:layout_marginBottom="14dp"
+                android:layout_marginHorizontal="27dp"
+                android:orientation="vertical">
+                <EditText
+                    android:id="@+id/nama_pasien"
+                    android:textSize="14sp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:hint="Nama Lengkap"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/jenisKelamin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/linetextbox"
@@ -56,84 +74,61 @@
                 android:layout_marginHorizontal="27dp"
                 android:orientation="vertical">
                 <TextView
-                    android:id="@+id/rlt93uchuob"
+                    android:id="@+id/txtJenisKelamin"
                     android:textColor="#828282"
                     android:textSize="14sp"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Nama Lengkap"
+                    android:hint="Jenis Kelamin"
                     />
+                <Spinner
+                    android:id="@+id/spinnerJenisKelamin"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:entries="@array/jenis_kelamin_array"
+                    android:spinnerMode="dropdown"/>
             </LinearLayout>
+
             <LinearLayout
-                android:id="@+id/tanggal_lahir"
+                android:id="@+id/rs14msdrpc4h"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/linetextbox"
-                android:paddingVertical="14dp"
-                android:paddingHorizontal="17dp"
-                android:layout_marginBottom="13dp"
-                android:layout_marginHorizontal="27dp"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/ri5mgxsuw9rk"
-                    android:textColor="#828282"
-                    android:textSize="14sp"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="Tanggal Lahir"
-                    />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/alamat"
-                android:layout_width="match_parent"
-                android:layout_height="96dp"
-                android:gravity="center_vertical"
                 android:background="@drawable/linetextbox"
                 android:paddingVertical="14dp"
                 android:paddingHorizontal="17dp"
                 android:layout_marginBottom="14dp"
                 android:layout_marginHorizontal="27dp"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/ry9mri7bq5f"
-                    android:textColor="#828282"
+                android:orientation="vertical">
+                <EditText
+                    android:id="@+id/tanggal_lahir_pasien"
                     android:textSize="14sp"
-                    android:layout_marginEnd="4dp"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:text="Alamat"
-                    />
-
+                    android:hint="Tanggal Lahir"/>
             </LinearLayout>
             <LinearLayout
-                android:id="@+id/email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:background="@drawable/linetextbox"
-                android:paddingVertical="14dp"
-                android:paddingHorizontal="17dp"
-                android:layout_marginBottom="13dp"
+                android:id="@+id/rjtfjt1ji3yi"
+                android:layout_width="358dp"
+                android:layout_height="190dp"
                 android:layout_marginHorizontal="27dp"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/rjw64matkcw"
-                    android:textColor="#828282"
-                    android:textSize="14sp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:text="Email"
-                    />
+                android:layout_marginBottom="13dp"
+                android:background="@drawable/linetextbox"
+                android:orientation="vertical"
+                android:paddingHorizontal="17dp"
+                android:paddingVertical="14dp">
 
+                <EditText
+                    android:id="@+id/alamat_pasien"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Alamat"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <Button
+                android:id="@+id/btnsimpan"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
-                android:id="@+id/btnsimpan"
                 android:text="Simpan"
                 android:textSize="18dp"
                 android:layout_marginTop="15dp"

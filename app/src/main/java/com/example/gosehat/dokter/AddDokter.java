@@ -1,9 +1,11 @@
 package com.example.gosehat.dokter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,6 +13,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gosehat.R;
+import com.example.gosehat.dashboard.DashboardAdmin;
+import com.example.gosehat.klinik.ViewKlinik;
 
 import java.util.ArrayList;
 
@@ -77,6 +81,16 @@ public class AddDokter extends AppCompatActivity {
                 saveData();
             }
         });
+
+        ImageView back = findViewById(R.id.iconback);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AddDokter.this, DashboardAdmin.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void saveData() {
@@ -100,6 +114,7 @@ public class AddDokter extends AppCompatActivity {
             dokter.setJenis_kelamin(jeniskel);
             dokter.setId_spesialis(spesialisId);
             dokter.setId_klinik(klinikId);
+            dokter.setStatus(1);
 
             DbHelper dbHelper = new DbHelper(this);
             boolean isInserted = dbHelper.insertDokter(dokter);

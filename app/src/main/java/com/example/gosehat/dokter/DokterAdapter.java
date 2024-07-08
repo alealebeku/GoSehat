@@ -76,8 +76,8 @@ public class DokterAdapter extends BaseAdapter {
                 intent.putExtra("nama_dokter", dokter.getNama_dokter());
                 intent.putExtra("alamat_dokter", dokter.getAlamat());
                 intent.putExtra("jenis_kelamin", dokter.getJenis_kelamin());
-                intent.putExtra("id_sps", dokter.getId_spesialis());
-                intent.putExtra("id_klinikk", dokter.getId_klinik());
+                intent.putExtra("id_spessialis", dokter.getId_spesialis());
+                intent.putExtra("id_klinik", dokter.getId_klinik());
                 context.startActivity(intent);
             }
         });

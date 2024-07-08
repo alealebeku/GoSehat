@@ -72,6 +72,7 @@
                     android:layout_height="50dp"
                     android:layout_width="match_parent"
                     android:hint="nama"
+                    android:editable="false"
                     />
             </LinearLayout>
 
