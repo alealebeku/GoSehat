@@ -161,10 +161,8 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(nama_lengkap, user.getNama());
-        values.put(jenis_kelamin_user, user.getJenisKelamin());
-        values.put(tanggal_lahir, user.getTanggalLahir());
         values.put(role, user.getRole());
-        values.put(email, user.getAlamat());
+        values.put(email, user.getEmail());
         values.put(password, user.getPassword());
 
         long result = db.insert(TABLE_USER, null, values);
@@ -199,12 +197,29 @@ public class DbHelper extends SQLiteOpenHelper {
             user = new User();
             user.setId(cursor.getInt(cursor.getColumnIndexOrThrow(id_user)));
             user.setNama(cursor.getString(cursor.getColumnIndexOrThrow(nama_lengkap)));
+            user.setJenisKelamin(cursor.getString(cursor.getColumnIndexOrThrow(jenis_kelamin_user)));
+            user.setTanggalLahir(cursor.getString(cursor.getColumnIndexOrThrow(tanggal_lahir)));
             user.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(email)));
+            user.setAlamat(cursor.getString(cursor.getColumnIndexOrThrow(alamat_user)));
             user.setRole(cursor.getString(cursor.getColumnIndexOrThrow(role)));
             user.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(password)));
         }
         cursor.close();
         return user;
+    }
+
+    public boolean updateUser(User user) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(nama_lengkap, user.getNama());
+        values.put(jenis_kelamin_user, user.getJenisKelamin());
+        values.put(tanggal_lahir, user.getTanggalLahir());
+        values.put(alamat_user, user.getAlamat());
+
+        int result = db.update(TABLE_USER, values, id_user + " = ?", new String[]{String.valueOf(user.getId())});
+        db.close();
+
+        return result > 0;
     }
 
     public ArrayList<User> getUsernameEmail() {
@@ -631,5 +646,37 @@ public class DbHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return count;
+    }
+
+    public RawatJalan getRawatJalanByIdPasien(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        RawatJalan rawatJalan = null;
+        String query = "SELECT * FROM " + TABLE_RAWAT_JALAN + " WHERE " + fk_rawat_jalan_pasien + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
+        if (cursor.moveToFirst()) {
+            rawatJalan = new RawatJalan();
+            rawatJalan.setId(cursor.getInt(cursor.getColumnIndexOrThrow(id_rawat_jalan)));
+            rawatJalan.setId_pasien(cursor.getInt(cursor.getColumnIndexOrThrow(fk_rawat_jalan_pasien)));
+            rawatJalan.setId_klinik(cursor.getInt(cursor.getColumnIndexOrThrow(fk_rawat_jalan_klinik)));
+            rawatJalan.setId_dokter(cursor.getInt(cursor.getColumnIndexOrThrow(fk_rawat_jalan_dokter)));
+            rawatJalan.setId_jadwal(cursor.getInt(cursor.getColumnIndexOrThrow(fk_rawat_jalan_jadwal_dokter)));
+            rawatJalan.setNomor_antrian(cursor.getString(cursor.getColumnIndexOrThrow(nomor_antrian)));
+            rawatJalan.setTanggal(cursor.getString(cursor.getColumnIndexOrThrow(tanggal)));
+            rawatJalan.setStatus(cursor.getInt(cursor.getColumnIndexOrThrow(status_rawat_jalan)));
+        }
+        cursor.close();
+        return rawatJalan;
+    }
+
+    public int getJumlahAntrianDepan(String nomorAntrian, String tanggalRawatJalan) {
+        // Extract the idDokter, idJadwalDokter, and nomorUrut from the nomorAntrian
+        int idDokter = Integer.parseInt(nomorAntrian.substring(0, 1));
+        int idJadwalDokter = Integer.parseInt(nomorAntrian.substring(1, 2));
+        int nomorUrut = Integer.parseInt(nomorAntrian.substring(2));
+
+        // Calculate the number of queues in front
+        int jumlahAntrianDepan = getNomorUrut(idDokter, idJadwalDokter, tanggalRawatJalan);
+
+        return jumlahAntrianDepan;
     }
 }

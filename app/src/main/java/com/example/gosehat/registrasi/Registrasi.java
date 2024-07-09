@@ -59,6 +59,7 @@ public class Registrasi extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Registrasi.this, Login.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -109,6 +110,7 @@ public class Registrasi extends AppCompatActivity {
                                                         Toast.makeText(Registrasi.this, "Registrasi berhasil. Silakan cek email untuk verifikasi.", Toast.LENGTH_SHORT).show();
                                                         Intent intent = new Intent(Registrasi.this, Login.class);
                                                         startActivity(intent);
+                                                        finish();
                                                     } else {
                                                         Toast.makeText(Registrasi.this, "Registrasi gagal di database.", Toast.LENGTH_SHORT).show();
                                                     }

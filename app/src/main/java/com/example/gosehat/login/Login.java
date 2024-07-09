@@ -55,8 +55,8 @@ public class Login extends AppCompatActivity {
                 String password = pw.getText().toString().trim();
 
                 // Debugging: Log email and password
-                Log.d("LoginDebug", "Password: " + password);
                 Log.d("LoginDebug", "Email: " + akunemail);
+                Log.d("LoginDebug", "Password: " + password);
 
                 // Validate that the email is in a valid email format
                 if (!android.util.Patterns.EMAIL_ADDRESS.matcher(akunemail).matches()) {
@@ -124,7 +124,7 @@ public class Login extends AppCompatActivity {
     private boolean isValidUser(String email, String password) {
         ArrayList<User> users = dbHelper.getUsernameEmail();
         for (User user : users) {
-            if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+            if (email.equals(user.getEmail()) && password.equals(user.getPassword())) {
                 return true;
             }
         }
@@ -134,7 +134,7 @@ public class Login extends AppCompatActivity {
     private String getUserRole(String email) {
         ArrayList<User> users = dbHelper.getUsernameEmail();
         for (User user : users) {
-            if (user.getEmail().equals(email)) {
+            if (email.equals(user.getEmail())) {
                 return user.getRole();
             }
         }

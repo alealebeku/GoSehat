@@ -146,7 +146,9 @@ public class AddRawatJalan extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AddRawatJalan.this, DashboardPasien.class);
+                intent.putExtra("id_user", user.getId());
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -164,7 +166,7 @@ public class AddRawatJalan extends AppCompatActivity {
         int idJadwalDokter = jadwalDokterList.get(jadwalDokter.getSelectedItemPosition()).getId_jadwal();
         int jumlahData = dbHelper.getNomorUrut(idDokter, idJadwalDokter, tanggalRawatJalan);
         int nomorUrut = jumlahData + 1;
-        String nomorAntrian =  String.valueOf(idDokter) + String.valueOf(idJadwalDokter) + String.format("%02d", nomorUrut);
+        String nomorAntrian =  String.valueOf(idDokter) + String.valueOf(idJadwalDokter) + String.format("%03d", nomorUrut);
 
         int pasienId = 1;
         int klinikId = klinikList.get(klinik.getSelectedItemPosition()).getId();
@@ -189,7 +191,9 @@ public class AddRawatJalan extends AppCompatActivity {
             if (isInserted) {
                 Toast.makeText(this, "Data berhasil disimpan", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(AddRawatJalan.this, DashboardPasien.class);
+                intent.putExtra("id_user", user.getId());
                 startActivity(intent);
+                finish();
             } else {
                 Toast.makeText(this, "Gagal menyimpan data", Toast.LENGTH_SHORT).show();
             }
