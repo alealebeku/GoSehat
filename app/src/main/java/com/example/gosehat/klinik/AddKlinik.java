@@ -42,6 +42,7 @@ public class AddKlinik extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(AddKlinik.this, ViewKlinik.class);
                 startActivity(intent);
+                finish();
             }
         });
         Button save = findViewById(R.id.btnsimpanklinik);

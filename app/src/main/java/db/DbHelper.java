@@ -15,6 +15,7 @@ import model.Dokter;
 import model.JadwalDokter;
 import model.Klinik;
 import model.RawatJalan;
+import model.RiwayatMedis;
 import model.Spesialis;
 import model.User;
 
@@ -81,6 +82,15 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String nomor_antrian = "nomor_antrian";
     public static final String status_rawat_jalan = "status";
 
+    // TABEL RAWAT JALAN
+    public static final String TABLE_RIWAYAT_MEDIS = "tb_riwayat_medis";
+    public static final String id_riwayat_medis = "id_rriwayat_medis";
+    public static final String fk_riwayat_medis_rawat_jalan = "id_rawat_jalan";
+    public static final String fk_riwayat_medis_pasien = "id_pasien";
+    public static final String diagnosa = "diagnosa";
+    public static final String pengobatan = "pengobatan";
+    public static final String perkembangan = "perkembangan";
+
     private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER + " ("
             + id_user + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + nama_lengkap + " TEXT, "
@@ -129,6 +139,13 @@ public class DbHelper extends SQLiteOpenHelper {
             + nomor_antrian + " TEXT, "
             + status_rawat_jalan + " INTEGER);";
 
+    private static final String CREATE_TABLE_RIWAYAT_MEDIS = "CREATE TABLE " + TABLE_RIWAYAT_MEDIS + " ("
+            + id_riwayat_medis + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + fk_riwayat_medis_rawat_jalan + " INTEGER, "
+            + fk_riwayat_medis_pasien + " INTEGER, "
+            + diagnosa + " TEXT, "
+            + pengobatan + " TEXT, "
+            + perkembangan + " TEXT);";
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -143,6 +160,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_DOKTER);
         db.execSQL(CREATE_TABLE_JADWAL);
         db.execSQL(CREATE_TABLE_RAWAT_JALAN);
+        db.execSQL(CREATE_TABLE_RIWAYAT_MEDIS);
     }
 
     @Override
@@ -153,6 +171,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DOKTER);
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_JADWAL);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RAWAT_JALAN);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RIWAYAT_MEDIS);
         onCreate(db);
     }
 
@@ -355,6 +374,21 @@ public class DbHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return kliniks;
+    }
+    public Klinik getKlinikById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Klinik klinik = null;
+        String query = "SELECT * FROM " + TABLE_KLINIK + " WHERE " + id_klinik + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
+        if (cursor.moveToFirst()) {
+            klinik = new Klinik();
+            klinik.setId(cursor.getInt(cursor.getColumnIndexOrThrow(id_klinik)));
+            klinik.setNamaklinik(cursor.getString(cursor.getColumnIndexOrThrow(nama_klinik)));
+            klinik.setAlamat(cursor.getString(cursor.getColumnIndexOrThrow(alamat_klinik)));
+            klinik.setStatus(cursor.getInt(cursor.getColumnIndexOrThrow(status_klinik)));
+        }
+        cursor.close();
+        return klinik;
     }
     public boolean deleteKlinik(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -648,6 +682,26 @@ public class DbHelper extends SQLiteOpenHelper {
         return count;
     }
 
+    public RawatJalan getRawatJalanById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        RawatJalan rawatJalan = null;
+        String query = "SELECT * FROM " + TABLE_RAWAT_JALAN + " WHERE " + id_rawat_jalan + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
+        if (cursor.moveToFirst()) {
+            rawatJalan = new RawatJalan();
+            rawatJalan.setId(cursor.getInt(cursor.getColumnIndexOrThrow(id_rawat_jalan)));
+            rawatJalan.setId_pasien(cursor.getInt(cursor.getColumnIndexOrThrow(fk_rawat_jalan_pasien)));
+            rawatJalan.setId_klinik(cursor.getInt(cursor.getColumnIndexOrThrow(fk_rawat_jalan_klinik)));
+            rawatJalan.setId_dokter(cursor.getInt(cursor.getColumnIndexOrThrow(fk_rawat_jalan_dokter)));
+            rawatJalan.setId_jadwal(cursor.getInt(cursor.getColumnIndexOrThrow(fk_rawat_jalan_jadwal_dokter)));
+            rawatJalan.setNomor_antrian(cursor.getString(cursor.getColumnIndexOrThrow(nomor_antrian)));
+            rawatJalan.setTanggal(cursor.getString(cursor.getColumnIndexOrThrow(tanggal)));
+            rawatJalan.setStatus(cursor.getInt(cursor.getColumnIndexOrThrow(status_rawat_jalan)));
+        }
+        cursor.close();
+        return rawatJalan;
+    }
+
     public RawatJalan getRawatJalanByIdPasien(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         RawatJalan rawatJalan = null;
@@ -688,5 +742,66 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return jumlahAntrian;
+    }
+
+    public boolean updateStatusRawatJalan(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(status_rawat_jalan, 0);
+
+        int result = db.update(TABLE_RAWAT_JALAN, values, id_rawat_jalan + " = ?", new String[]{String.valueOf(id)});
+        db.close();
+
+        return result > 0;
+    }
+
+    //----------------------------------------RIWAYAT MEDIS----------------------------------------------
+    public boolean insertRiwayatMedis(RiwayatMedis riwayatMedis) {
+        updateStatusRawatJalan(riwayatMedis.getId_rawat_jalan());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(fk_riwayat_medis_rawat_jalan, riwayatMedis.getId_rawat_jalan());
+        values.put(fk_riwayat_medis_pasien, riwayatMedis.getId_pasien());
+        values.put(diagnosa, riwayatMedis.getDiagnosa());
+        values.put(pengobatan, riwayatMedis.getPengobatan());
+        values.put(perkembangan, riwayatMedis.getPerkembangan());
+
+        long result = db.insert(TABLE_RIWAYAT_MEDIS, null, values);
+        db.close();
+
+        return result != -1;
+    }
+
+    public ArrayList<RiwayatMedis> getRiwayatMedisByIdPasien(int id) {
+        ArrayList<RiwayatMedis> riwayatMedis = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_RIWAYAT_MEDIS + " WHERE " + fk_riwayat_medis_pasien + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                RiwayatMedis rMedis = new RiwayatMedis();
+                rMedis.setId(cursor.getInt(cursor.getColumnIndexOrThrow(id_riwayat_medis)));
+                rMedis.setId_rawat_jalan(cursor.getInt(cursor.getColumnIndexOrThrow(fk_riwayat_medis_rawat_jalan)));
+                rMedis.setId_pasien(cursor.getInt(cursor.getColumnIndexOrThrow(fk_riwayat_medis_pasien)));
+                rMedis.setDiagnosa(cursor.getString(cursor.getColumnIndexOrThrow(diagnosa)));
+                rMedis.setPengobatan(cursor.getString(cursor.getColumnIndexOrThrow(pengobatan)));
+                rMedis.setPerkembangan(cursor.getString(cursor.getColumnIndexOrThrow(perkembangan)));
+
+                RawatJalan rawatJalan = getRawatJalanByIdPasien(cursor.getInt(cursor.getColumnIndexOrThrow(fk_riwayat_medis_pasien)));
+                Klinik klinik = getKlinikById(rawatJalan.getId_klinik());
+                Dokter dokter = getDokterById(rawatJalan.getId_dokter());
+
+                rMedis.setTanggal(rawatJalan.getTanggal());
+                rMedis.setNama_klinik(klinik.getNamaklinik());
+                rMedis.setNama_dokter(dokter.getNama_dokter());
+
+                riwayatMedis.add(rMedis);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return riwayatMedis;
     }
 }

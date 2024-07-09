@@ -41,7 +41,11 @@
             android:exported="true">
         </activity>
         <activity
-            android:name=".riwayatmedis.RiwayatMedis"
+            android:name=".riwayatmedis.ViewRiwayatMedis"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".riwayatmedis.AddRiwayatMedis"
             android:exported="true">
         </activity>
         <activity

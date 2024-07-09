@@ -15,6 +15,7 @@ import com.example.gosehat.dokter.ViewDokter;
 import com.example.gosehat.jadwaldokter.AddJadwal;
 import com.example.gosehat.jadwaldokter.ViewJadwal;
 import com.example.gosehat.klinik.ViewKlinik;
+import com.example.gosehat.riwayatmedis.AddRiwayatMedis;
 import com.example.gosehat.spesialis.ViewSpesialis;
 
 public class DashboardAdmin extends AppCompatActivity {
@@ -59,7 +60,7 @@ public class DashboardAdmin extends AppCompatActivity {
         laporan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DashboardAdmin.this, ViewSpesialis.class);
+                Intent intent = new Intent(DashboardAdmin.this, AddRiwayatMedis.class);
                 startActivity(intent);
             }
         });
