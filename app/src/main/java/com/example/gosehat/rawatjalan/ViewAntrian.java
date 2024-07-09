@@ -13,12 +13,14 @@ import com.example.gosehat.R;
 import com.example.gosehat.dashboard.DashboardPasien;
 
 import db.DbHelper;
+import model.JadwalDokter;
 import model.RawatJalan;
 import model.User;
 
 public class ViewAntrian extends AppCompatActivity {
     private DbHelper dbHelper;
     private User user;
+    private JadwalDokter jadwalDokter;
     private RawatJalan rawatJalan;
     private int userId;
     private int jumlahAntrianDiDepan;
@@ -34,23 +36,23 @@ public class ViewAntrian extends AppCompatActivity {
         user =  dbHelper.getUserById(userId);
 
         rawatJalan = dbHelper.getRawatJalanByIdPasien(userId);
+        jadwalDokter = dbHelper.getJadwalById(rawatJalan.getId_jadwal());
 
         nomorRawatJalan = findViewById(R.id.nomorrawatjalan);
         tanggal = findViewById(R.id.tanggal);
-        waktu = findViewById(R.id.waktu);
         antrian = findViewById(R.id.antrian);
         nomorAntrian = findViewById(R.id.nomorantrian);
 
-        if (rawatJalan != null) {
-            nomorRawatJalan.setText(String.valueOf(rawatJalan.getId()) != null ? String.valueOf(rawatJalan.getId()) : "-");
-            tanggal.setText(rawatJalan.getTanggal() != null ? rawatJalan.getTanggal() : "-");
+        if (rawatJalan != null && jadwalDokter != null) {
+            nomorRawatJalan.setText("Nomor Pendaftaran : " + String.valueOf(rawatJalan.getId()) != null ? "Nomor Pendaftaran : " + String.valueOf(rawatJalan.getId()) : "-");
+            String waktuJadwal = jadwalDokter.getWaktu_mulai() + "-" + jadwalDokter.getWaktu_berakhir();
+            tanggal.setText(rawatJalan.getTanggal() + "  " + waktuJadwal != null ? rawatJalan.getTanggal() + "  " + waktuJadwal : "-");
             nomorAntrian.setText(rawatJalan.getNomor_antrian() != null ? rawatJalan.getNomor_antrian() : "-");
+            jumlahAntrianDiDepan = dbHelper.getJumlahAntrianBelumDilayani(rawatJalan.getId_dokter(), rawatJalan.getId_jadwal(), rawatJalan.getTanggal());
+            antrian.setText(String.valueOf(jumlahAntrianDiDepan - 1));
         } else {
             Toast.makeText(this, "Data tidak ditemukan", Toast.LENGTH_SHORT).show();
         }
-
-        jumlahAntrianDiDepan = dbHelper.getJumlahAntrianDepan(rawatJalan.getNomor_antrian(), rawatJalan.getNomor_antrian());
-        antrian.setText(String.valueOf(jumlahAntrianDiDepan));
 
         ImageView back = findViewById(R.id.iconback);
         back.setOnClickListener(new View.OnClickListener() {

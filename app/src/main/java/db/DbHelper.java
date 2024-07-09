@@ -668,15 +668,25 @@ public class DbHelper extends SQLiteOpenHelper {
         return rawatJalan;
     }
 
-    public int getJumlahAntrianDepan(String nomorAntrian, String tanggalRawatJalan) {
-        // Extract the idDokter, idJadwalDokter, and nomorUrut from the nomorAntrian
-        int idDokter = Integer.parseInt(nomorAntrian.substring(0, 1));
-        int idJadwalDokter = Integer.parseInt(nomorAntrian.substring(1, 2));
-        int nomorUrut = Integer.parseInt(nomorAntrian.substring(2));
+    public int getJumlahAntrianBelumDilayani(int idDokter, int idJadwalDokter, String tanggalRawatJalan) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT COUNT(*) FROM " + TABLE_RAWAT_JALAN +
+                " WHERE " + fk_rawat_jalan_dokter + " = ?" +
+                " AND " + fk_rawat_jalan_jadwal_dokter + " = ?" +
+                " AND " + tanggal + " = ?" +
+                " AND " + status_rawat_jalan + " = 1";
 
-        // Calculate the number of queues in front
-        int jumlahAntrianDepan = getNomorUrut(idDokter, idJadwalDokter, tanggalRawatJalan);
+        Cursor cursor = db.rawQuery(query, new String[]{
+                String.valueOf(idDokter),
+                String.valueOf(idJadwalDokter),
+                tanggalRawatJalan
+        });
 
-        return jumlahAntrianDepan;
+        int jumlahAntrian = 0;
+        if (cursor.moveToFirst()) {
+            jumlahAntrian = cursor.getInt(0);
+        }
+        cursor.close();
+        return jumlahAntrian;
     }
 }

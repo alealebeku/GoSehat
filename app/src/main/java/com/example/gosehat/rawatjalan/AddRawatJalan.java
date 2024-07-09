@@ -168,7 +168,7 @@ public class AddRawatJalan extends AppCompatActivity {
         int nomorUrut = jumlahData + 1;
         String nomorAntrian =  String.valueOf(idDokter) + String.valueOf(idJadwalDokter) + String.format("%03d", nomorUrut);
 
-        int pasienId = 1;
+        int pasienId = user.getId();
         int klinikId = klinikList.get(klinik.getSelectedItemPosition()).getId();
         int dokterId = dokterList.get(dokter.getSelectedItemPosition()).getId_dokter();
         int jadwalDokterId = jadwalDokterList.get(jadwalDokter.getSelectedItemPosition()).getId_jadwal();
