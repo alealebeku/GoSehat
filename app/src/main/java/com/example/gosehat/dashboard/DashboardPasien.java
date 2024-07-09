@@ -15,16 +15,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.gosehat.R;
 import com.example.gosehat.rawatjalan.AddRawatJalan;
 import com.example.gosehat.rawatjalan.ViewAntrian;
-import com.example.gosehat.spesialis.ViewSpesialis;
+import com.example.gosehat.riwayatmedis.ViewRiwayatMedis;
 import com.example.gosehat.user.ViewUser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.time.LocalDate;
 
 import db.DbHelper;
 import model.JadwalDokter;
@@ -41,6 +39,7 @@ public class DashboardPasien extends AppCompatActivity {
     private RawatJalan rawatJalan;
     private int userId;
     private int jumlahAntrianDiDepan;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,9 +48,8 @@ public class DashboardPasien extends AppCompatActivity {
 
         Intent intent = getIntent();
         userId = intent.getIntExtra("id_user", -1);
-        user =  dbHelper.getUserById(userId);
+        user = dbHelper.getUserById(userId);
         rawatJalan = dbHelper.getRawatJalanByIdPasien(user.getId());
-        jadwalDokter = dbHelper.getJadwalById(rawatJalan.getId_jadwal());
 
         namaUser = findViewById(R.id.textViewNamaUser);
         monitorAntrian1 = findViewById(R.id.monitorantrian1);
@@ -59,33 +57,41 @@ public class DashboardPasien extends AppCompatActivity {
         nomorAntrian = findViewById(R.id.nomorantrian);
         antrian = findViewById(R.id.antrian);
 
-        //cek rawat jalan
-        Calendar calendar = Calendar.getInstance();
-        Date currentDate = calendar.getTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault());
-        String tanggalHariIni = dateFormat.format(currentDate);
+        if (rawatJalan != null) {
+            jadwalDokter = dbHelper.getJadwalById(rawatJalan.getId_jadwal());
 
-        int currentHour = calendar.get(Calendar.HOUR_OF_DAY); // Jam dalam format 24 jam
-        int currentMinute = calendar.get(Calendar.MINUTE);
-        String waktuSekarang = String.format(Locale.getDefault(), "%02d:%02d", currentHour, currentMinute);
+            if (jadwalDokter != null) {
+                // cek rawat jalan
+                Calendar calendar = Calendar.getInstance();
+                Date currentDate = calendar.getTime();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault());
+                String tanggalHariIni = dateFormat.format(currentDate);
 
-        String waktuMulai = jadwalDokter.getWaktu_mulai();
-        String waktuBerakhir = jadwalDokter.getWaktu_berakhir();
+                int currentHour = calendar.get(Calendar.HOUR_OF_DAY); // Jam dalam format 24 jam
+                int currentMinute = calendar.get(Calendar.MINUTE);
+                String waktuSekarang = String.format(Locale.getDefault(), "%02d:%02d", currentHour, currentMinute);
 
-        boolean isWaktuSesuai = isWaktuSesuai(waktuSekarang, waktuMulai, waktuBerakhir);
+                String waktuMulai = jadwalDokter.getWaktu_mulai();
+                String waktuBerakhir = jadwalDokter.getWaktu_berakhir();
 
-        if (tanggalHariIni.equals(rawatJalan.getTanggal()) && isWaktuSesuai) {
-            jumlahAntrianDiDepan = dbHelper.getJumlahAntrianBelumDilayani(rawatJalan.getId_dokter(), rawatJalan.getId_jadwal(), rawatJalan.getTanggal());
+                boolean isWaktuSesuai = isWaktuSesuai(waktuSekarang, waktuMulai, waktuBerakhir);
 
-            monitorAntrian1.setVisibility(View.VISIBLE);
-            monitorAntrian2.setVisibility(View.VISIBLE);
-            nomorAntrian.setText("Nomor antrian anda : " + rawatJalan.getNomor_antrian() != null ? "Nomor antrian anda : " + rawatJalan.getNomor_antrian() : "-");
-            antrian.setText("Menunggu : " + String.valueOf(jumlahAntrianDiDepan - 1));
+                if (tanggalHariIni.equals(rawatJalan.getTanggal()) && isWaktuSesuai) {
+                    jumlahAntrianDiDepan = dbHelper.getJumlahAntrianBelumDilayani(rawatJalan.getId_dokter(), rawatJalan.getId_jadwal(), rawatJalan.getTanggal());
+
+                    monitorAntrian1.setVisibility(View.VISIBLE);
+                    monitorAntrian2.setVisibility(View.VISIBLE);
+                    nomorAntrian.setText("Nomor antrian anda: " + (rawatJalan.getNomor_antrian() != null ? rawatJalan.getNomor_antrian() : "-"));
+                    antrian.setText("Menunggu: " + (jumlahAntrianDiDepan - 1));
+                } else {
+                    monitorAntrian1.setVisibility(View.GONE);
+                    monitorAntrian2.setVisibility(View.GONE);
+                }
+            }
         } else {
             monitorAntrian1.setVisibility(View.GONE);
             monitorAntrian2.setVisibility(View.GONE);
         }
-        //end
 
         namaUser.setText("Selamat Datang, " + user.getNama() + "!");
 
@@ -108,14 +114,17 @@ public class DashboardPasien extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         LinearLayout Rmedis = findViewById(R.id.riwayatmedis);
         Rmedis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DashboardPasien.this, AddRawatJalan.class);
+                Intent intent = new Intent(DashboardPasien.this, ViewRiwayatMedis.class);
+                intent.putExtra("id_user", user.getId());
                 startActivity(intent);
             }
         });
+
         LinearLayout antrian = findViewById(R.id.monitorantrian);
         antrian.setOnClickListener(new View.OnClickListener() {
             @Override
