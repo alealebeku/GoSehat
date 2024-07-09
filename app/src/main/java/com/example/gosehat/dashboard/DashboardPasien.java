@@ -14,10 +14,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gosehat.R;
 import com.example.gosehat.rawatjalan.AddRawatJalan;
+import com.example.gosehat.rawatjalan.ViewAntrian;
 import com.example.gosehat.spesialis.ViewSpesialis;
 import com.example.gosehat.user.ViewUser;
 
 import db.DbHelper;
+import model.RawatJalan;
 import model.User;
 
 public class DashboardPasien extends AppCompatActivity {
@@ -26,6 +28,7 @@ public class DashboardPasien extends AppCompatActivity {
     ImageView profilPasien;
     private DbHelper dbHelper;
     private User user;
+    private RawatJalan rawatJalan;
     private int userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +55,6 @@ public class DashboardPasien extends AppCompatActivity {
                 Intent intent = new Intent(DashboardPasien.this, ViewUser.class);
                 intent.putExtra("id_user", user.getId());
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -63,7 +65,6 @@ public class DashboardPasien extends AppCompatActivity {
                 Intent intent = new Intent(DashboardPasien.this, AddRawatJalan.class);
                 intent.putExtra("id_user", user.getId());
                 startActivity(intent);
-                finish();
             }
         });
         LinearLayout Rmedis = findViewById(R.id.riwayatmedis);
@@ -78,8 +79,14 @@ public class DashboardPasien extends AppCompatActivity {
         antrian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DashboardPasien.this, ViewSpesialis.class);
-                startActivity(intent);
+                rawatJalan = dbHelper.getRawatJalanByIdPasien(userId);
+                if (rawatJalan != null) {
+                    Intent intent = new Intent(DashboardPasien.this, ViewAntrian.class);
+                    intent.putExtra("id_user", user.getId());
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(DashboardPasien.this, "Anda sedang tidak di dalam antrian", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

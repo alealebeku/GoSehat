@@ -41,23 +41,11 @@ public class ViewUser extends AppCompatActivity {
         editButton = findViewById(R.id.btnedit);
 
         if (user != null) {
-            namaPasien.setText(user.getNama());
-            if (user.getJenisKelamin().isEmpty()) {
-                jenisKelamin.setText("-");
-            } else {
-                jenisKelamin.setText(user.getJenisKelamin());
-            }
-            if (user.getTanggalLahir().isEmpty()) {
-                tanggalLahir.setText("-");
-            } else {
-                tanggalLahir.setText(user.getTanggalLahir());
-            }
-            email.setText(user.getEmail());
-            if (user.getAlamat().isEmpty()) {
-                alamat.setText("-");
-            } else {
-                alamat.setText(user.getAlamat());
-            }
+            namaPasien.setText(user.getNama() != null ? user.getNama() : "-");
+            jenisKelamin.setText(user.getJenisKelamin() != null ? user.getJenisKelamin() : "-");
+            tanggalLahir.setText(user.getTanggalLahir() != null ? user.getTanggalLahir() : "-");
+            email.setText(user.getEmail() != null ? user.getEmail() : "-");
+            alamat.setText(user.getAlamat() != null ? user.getAlamat() : "-");
         } else {
             Toast.makeText(this, "Data user tidak ditemukan", Toast.LENGTH_SHORT).show();
         }
@@ -67,6 +55,7 @@ public class ViewUser extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ViewUser.this, DashboardPasien.class);
+                intent.putExtra("id_user", user.getId());
                 startActivity(intent);
                 finish();
             }
